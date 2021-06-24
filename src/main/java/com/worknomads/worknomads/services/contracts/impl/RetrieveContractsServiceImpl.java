@@ -4,6 +4,7 @@ import com.worknomads.worknomads.dtos.ContractDTO;
 import com.worknomads.worknomads.dtos.ContractDetailsDTO;
 import com.worknomads.worknomads.services.contracts.RetrieveContractsService;
 import org.springframework.stereotype.Service;
+import org.web3j.protocol.Web3j;
 
 @Service
 public class RetrieveContractsServiceImpl implements RetrieveContractsService {
