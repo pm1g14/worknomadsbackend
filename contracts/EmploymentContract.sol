@@ -1,34 +1,42 @@
-pragma solidity ^0.4.0;
+pragma solidity ^0.5.16;
 
 contract EmploymentContract {
 
-    String private companyId;
-    String private employeeName;
+    string private companyId;
+    string private employeeName;
     ufixed private employeeSalary;
-    String private employeeSalaryUnit;
-    String private employeeSur;
+    string private employeeSalaryUnit;
+    string private employeeSur;
     uint private contractDuration;
-    String private contractTerm;
-    String private paymentTerm;
-    String private country;
+    string private contractTerm;
+    string private paymentTerm;
+    string private country;
 
     ufixed private balance = 0;
-    String private balanceUnit;
+    string private balanceUnit;
 
+    uint private contractInitTimestamp;
 
-
-
-    constructor(String cid, String name, String surname, uint duration, String term, String countr, String salaryTerm, uint contractInitiationTimestamp) {
-        companyId = cid;
-        employeeName = name;
-        employeeSur = surname;
-        contractDuration = duration;
-        contractTerm = term;
-        country = countr;
-        paymentTerm = salaryTerm;
+    constructor(
+        string memory _cid,
+        string memory _name,
+        string memory _surname,
+        uint _duration,
+        string memory _term,
+        string memory _country,
+        string memory _salaryTerm,
+        uint _contractInitiationTimestamp) public {
+            companyId = _cid;
+            employeeName = _name;
+            employeeSur = _surname;
+            contractDuration = _duration;
+            contractTerm = _term;
+            country = _country;
+            paymentTerm = _salaryTerm;
+            contractInitTimestamp = _contractInitiationTimestamp;
     }
 
-    function setBalance(ufixed newBalance) public {
+    function setBalance(ufixed newBalance) public returns(ufixed) {
         if (newBalance >= 0) {
             return balance += newBalance;
         } else return balance;
@@ -41,8 +49,8 @@ contract EmploymentContract {
 
     }
 
-    function isActiveContract() view {
-        uint remainingContract = now - contractInitiationTimestamp;
+    function isActiveContract() public view returns (bool){
+        uint remainingContract = now - contractInitTimestamp;
         return (remainingContract >= 0);
 
     }
