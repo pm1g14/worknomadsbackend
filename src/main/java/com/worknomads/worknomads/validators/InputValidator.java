@@ -1,6 +1,7 @@
 package com.worknomads.worknomads.validators;
 
+@FunctionalInterface
 public interface InputValidator<T> {
 
-    public boolean validate(T toBeValidated);
+    boolean validate(T toBeValidated);
 }

@@ -44,14 +44,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <plugin>
-                <groupId>org.web3j</groupId>
-                <artifactId>web3j-maven-plugin</artifactId>
-                <version>4.8.1</version>
-                <configuration>
-                    <soliditySourceFiles/>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
