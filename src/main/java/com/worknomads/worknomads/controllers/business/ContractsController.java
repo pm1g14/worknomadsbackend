@@ -29,7 +29,7 @@ public class ContractsController {
        @RequestBody ContractDTO contract) {
 
             if (validator.validate(contract)) {
-                service.createContract(contract);
+                service.createContract(contract, cid);
             }
 
     }

@@ -4,17 +4,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public final class ContractDTO {
 
-    private final String contractId;
-
     @JsonProperty(namespace="employeeName") private final String employeeName;
     @JsonProperty(namespace="employeeSur") private final String employeeSur;
     @JsonProperty(namespace="address") private final String address;
     @JsonProperty(namespace="countryOfResidence") private final String countryOfResidence;
     @JsonProperty(namespace="email") private final String email;
     @JsonProperty(namespace="phoneNum") private final String phoneNum;
+    @JsonProperty(namespace = "companyWalletAddress") private final String companyWalletAddress;
+    @JsonProperty(namespace = "employeeWalletAddress") private final String employeeWalletAddress;
     @JsonProperty(namespace="contractDetails") private final ContractDetailsDTO contractDetails;
 
-    public ContractDTO(String employeeName, String employeeSur, String address, String country, String email, String phoneNum, ContractDetailsDTO contractDetails) {
+    public ContractDTO(String employeeName, String employeeSur, String address, String country, String email, String phoneNum, String senderWalletAddr, ContractDetailsDTO contractDetails, String employeeWalletAddress) {
         this.employeeName = employeeName;
         this.address = address;
         this.employeeSur = employeeSur;
@@ -22,7 +22,8 @@ public final class ContractDTO {
         this.email = email;
         this.phoneNum = phoneNum;
         this.contractDetails = contractDetails;
-        this.contractId = ""; //TODO implement a logic to provide a unique contractId for each contract
+        this.companyWalletAddress = senderWalletAddr;
+        this.employeeWalletAddress = employeeWalletAddress;
     }
 
     public String getEmployeeName() {
@@ -53,7 +54,11 @@ public final class ContractDTO {
         return countryOfResidence;
     }
 
-    public String getContractId() {
-        return contractId;
+    public String getCompanyWalletAddress() {
+        return companyWalletAddress;
+    }
+
+    public String getEmployeeWalletAddress() {
+        return employeeWalletAddress;
     }
 }
