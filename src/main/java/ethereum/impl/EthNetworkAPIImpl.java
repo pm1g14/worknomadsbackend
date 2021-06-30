@@ -9,14 +9,16 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.Uint;
+import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
-import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.tx.RawTransactionManager;
+import org.web3j.tx.gas.DefaultGasProvider;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,9 +28,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.Arrays;
-import java.util.Optional;
 
-@Component
 public class EthNetworkAPIImpl implements EthNetworkAPI {
 
 
@@ -41,7 +41,7 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
         //TODO investigate how to create wallets on the go
         //Optional<File> walletFileLocation = Optional.of(new File(env.getProperty("employee.wallet.location")));
         Web3j web3 = getConnection();
-//        try {
+ //       try {
             //createWallet(password, walletFileLocation.orElseThrow(FileNotFoundException::new));
 //            EthGetTransactionCount ethGetTransactionCount = web3.ethGetTransactionCount(credentials.getAddress(), DefaultBlockParameterName.PENDING).send();
 //
@@ -49,26 +49,26 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
 //            String encodedConstructor =
 //                    FunctionEncoder.encodeConstructor(
 //                            Arrays.asList(
-//                                    new Type(cid),
-//                                    new Type(contractContents.getEmployeeName()),
-//                                    new Type(contractContents.getEmployeeSur()),
-//                                    new Type(contractContents.getContractDetails().getDuration()),
-//                                    new Type(contractContents.getContractDetails().getTerm()),
-//                                    new Type(contractContents.getCountryOfResidence()),
-//                                    new Type(contractContents.getContractDetails().getPaymentTerm())
+//                                    new Utf8String(cid),
+//                                    new Utf8String(contractContents.getEmployeeName()),
+//                                    new Utf8String(contractContents.getEmployeeSur()),
+//                                    new Utf8String(contractContents.getCountryOfResidence()),
+//                                    new Utf8String(contractContents.getContractDetails().getPaymentTerm().term),
+//                                    new Uint256(contractContents.getContractDetails().getDateOfCreation().toEpochSecond())
 //                            )
 //                    );
-//            RawTransaction rawTransaction = RawTransaction.createContractTransaction(
-//                    nonce,
-//                    web3.ethGasPrice,
+//                    web3.ethEstimateGas(RawTransaction.createContractTransaction(
+//                            nonce,
+//                            DefaultGasProvider.GAS_PRICE,
+//                            DefaultGasProvider.GAS_LIMIT,
+//                            encodedConstructor,
+//                            )).sendAsync();
 //
 //
 //            );
-//            RawTransactionManager transactionManager = new RawTransactionManager(web3, credentials);
 //
-//            EthSendTransaction transaction = transactionManager.signAndSend(rawTransaction);
 //            logger.debug("transaction hash = {}", transaction.getTransactionHash());
-
+//
 //        } catch (FileNotFoundException e) {
 //            e.printStackTrace();
 //        }
