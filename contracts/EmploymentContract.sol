@@ -7,51 +7,45 @@ contract EmploymentContract {
     ufixed private employeeSalary;
     string private employeeSalaryUnit;
     string private employeeSur;
-    uint private contractDuration;
-    string private contractTerm;
     string private paymentTerm;
     string private country;
 
-    ufixed private balance = 0;
     string private balanceUnit;
 
-    uint private contractInitTimestamp;
 
     constructor(
         string memory _cid,
         string memory _name,
         string memory _surname,
-        uint _duration,
-        string memory _term,
         string memory _country,
         string memory _salaryTerm,
-        uint _contractInitiationTimestamp) public {
+        string memory _balanceUnit) public {
             companyId = _cid;
             employeeName = _name;
             employeeSur = _surname;
-            contractDuration = _duration;
-            contractTerm = _term;
             country = _country;
             paymentTerm = _salaryTerm;
-            contractInitTimestamp = _contractInitiationTimestamp;
+            balanceUnit = _balanceUnit;
     }
 
-    function setBalance(ufixed newBalance) public returns(ufixed) {
-        if (newBalance >= 0) {
-            return balance += newBalance;
-        } else return balance;
+    function addFunds(uint256 newFunds, string memory fundsUnit) public payable {
+        require(newFunds >= 0 && keccak256(abi.encodePacked(balanceUnit)) == keccak256(abi.encodePacked(fundsUnit)), "Invalid funds value passed or passed unit doesn't match with balance unit, action cancelled.");
+        uint256 contractBalance = address(this).balance;
+        contractBalance = contractBalance + newFunds;
     }
 
-    function transferFunds(address fromWallet, address toWallet) public {
+    function getBalance() public view returns(uint256) {
+        return address(msg.sender).balance;
     }
 
-    function remainingSalary() private {
-
+    function transferFunds(uint256 amount, address payable toWallet) public {
+        address thisAddress = msg.sender;
+        require(toWallet != thisAddress && amount <= getBalance(), "The sender and receiver addresses cannot be the same");
+        toWallet.transfer(amount);
     }
 
     function isActiveContract() public view returns (bool){
-        uint remainingContract = now - contractInitTimestamp;
-        return (remainingContract >= 0);
+
 
     }
 }

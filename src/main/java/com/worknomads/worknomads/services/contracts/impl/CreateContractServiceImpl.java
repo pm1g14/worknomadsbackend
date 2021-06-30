@@ -13,20 +13,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class CreateContractServiceImpl implements CreateContractService {
 
+    private EthNetworkAPI ethNetworkService = new EthNetworkAPIImpl();
+
     @Autowired
     private StoreContractDAO dao;
 
-    @Autowired
-    private EthNetworkAPIImpl ethNetworkAPI;
 
     @Autowired
     private InputAdapter<ContractDTO, ContractDO> adapter;
+
 
     @Override
     public void createContract(ContractDTO contract, String cid) {
         var contractDO = adapter.mapDTOtoDO(contract);
         if (dao.storeContractDetails(contractDO)) {
-            ethNetworkAPI.createAndPublishContract(contractDO, cid);
+            ethNetworkService.createAndPublishContract(contractDO, cid);
         }
     }
 }
