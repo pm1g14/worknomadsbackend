@@ -17,6 +17,7 @@ import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.tx.gas.DefaultGasProvider;
 
@@ -41,37 +42,38 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
         //TODO investigate how to create wallets on the go
         //Optional<File> walletFileLocation = Optional.of(new File(env.getProperty("employee.wallet.location")));
         Web3j web3 = getConnection();
- //       try {
-            //createWallet(password, walletFileLocation.orElseThrow(FileNotFoundException::new));
-//            EthGetTransactionCount ethGetTransactionCount = web3.ethGetTransactionCount(credentials.getAddress(), DefaultBlockParameterName.PENDING).send();
-//
-//            BigInteger nonce =  ethGetTransactionCount.getTransactionCount();
-//            String encodedConstructor =
-//                    FunctionEncoder.encodeConstructor(
-//                            Arrays.asList(
-//                                    new Utf8String(cid),
-//                                    new Utf8String(contractContents.getEmployeeName()),
-//                                    new Utf8String(contractContents.getEmployeeSur()),
-//                                    new Utf8String(contractContents.getCountryOfResidence()),
-//                                    new Utf8String(contractContents.getContractDetails().getPaymentTerm().term),
-//                                    new Uint256(contractContents.getContractDetails().getDateOfCreation().toEpochSecond())
-//                            )
-//                    );
-//                    web3.ethEstimateGas(RawTransaction.createContractTransaction(
-//                            nonce,
-//                            DefaultGasProvider.GAS_PRICE,
-//                            DefaultGasProvider.GAS_LIMIT,
-//                            encodedConstructor,
-//                            )).sendAsync();
-//
-//
-//            );
-//
-//            logger.debug("transaction hash = {}", transaction.getTransactionHash());
-//
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
+        try {
+         //   createWallet(password, walletFileLocation.orElseThrow(FileNotFoundException::new));
+            EthGetTransactionCount ethGetTransactionCount = web3.ethGetTransactionCount(credentials.getAddress(), DefaultBlockParameterName.PENDING).send();
+
+            BigInteger nonce =  ethGetTransactionCount.getTransactionCount();
+            String encodedConstructor =
+                    FunctionEncoder.encodeConstructor(
+                            Arrays.asList(
+                                    new Utf8String(cid),
+                                    new Utf8String(contractContents.getEmployeeName()),
+                                    new Utf8String(contractContents.getEmployeeSur()),
+                                    new Utf8String(contractContents.getCountryOfResidence()),
+                                    new Utf8String(contractContents.getContractDetails().getPaymentTerm().term),
+                                    new Uint256(contractContents.getContractDetails().getContractExpiry().toEpochSecond())
+                            )
+                    );
+                    web3.ethEstimateGas(Transaction.createContractTransaction(
+                            contractContents.getAddress(),
+                            nonce,
+                            DefaultGasProvider.GAS_PRICE,
+                            DefaultGasProvider.GAS_LIMIT,
+                            encodedConstructor
+                            )).sendAsync();
+
+
+            );
+
+            logger.debug("transaction hash = {}", transaction.getTransactionHash());
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
     }
 
