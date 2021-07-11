@@ -26,8 +26,8 @@ public class CreateContractServiceImpl implements CreateContractService {
     @Override
     public void createContract(ContractDTO contract, String cid) {
         var contractDO = adapter.mapDTOtoDO(contract);
-        if (dao.storeContractDetails(contractDO)) {
-            ethNetworkService.createAndPublishContract(contractDO, cid);
-        }
+        ethNetworkService.createAndPublishContract(contractDO, cid)
+                .thenApply(receipt -> dao.storeContractDetails(contractDO, receipt.toString()));
+
     }
 }

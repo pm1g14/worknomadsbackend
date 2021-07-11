@@ -7,12 +7,14 @@ public final class ContractDetailsDTO {
     private final String remoteLocation;
     private final int paymentInstallments;
     private final String paymentTerm;
+    private final String balanceUnit;
 
-    public ContractDetailsDTO(String contractExpiry, String remoteLocation, double grossSalary, int paymentInstallments, String paymentTerm) {
+    public ContractDetailsDTO(String contractExpiry, String remoteLocation, double grossSalary, int paymentInstallments, String paymentTerm, String balanceUnit) {
         this.contractExpiry = contractExpiry;
         this.grossSalary = grossSalary;
         this.remoteLocation = remoteLocation;
         this.paymentInstallments = paymentInstallments;
+        this.balanceUnit = balanceUnit;
         this.paymentTerm = paymentTerm;
     }
 
@@ -34,5 +36,9 @@ public final class ContractDetailsDTO {
 
     public String getContractExpiry() {
         return contractExpiry;
+    }
+
+    public String getBalanceUnit() {
+        return balanceUnit;
     }
 }

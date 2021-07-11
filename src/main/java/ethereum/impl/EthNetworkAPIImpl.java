@@ -2,6 +2,7 @@ package ethereum.impl;
 
 import com.worknomads.worknomads.dos.ContractDO;
 import ethereum.EthNetworkAPI;
+import ethereum.wrappers.EmploymentContract_sol_EmploymentContract;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +14,20 @@ import org.web3j.abi.datatypes.Uint;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.CipherException;
+import org.web3j.crypto.Credentials;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.exceptions.TransactionException;
+import org.web3j.tx.ChainId;
+import org.web3j.tx.ClientTransactionManager;
+import org.web3j.tx.RawTransactionManager;
+import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.DefaultGasProvider;
 
 import java.io.File;
@@ -29,52 +38,49 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.Arrays;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 public class EthNetworkAPIImpl implements EthNetworkAPI {
 
 
     @Autowired
     private Environment env;
-    Logger logger = LoggerFactory.getLogger(EthNetworkAPI.class);
+    private Logger logger = LoggerFactory.getLogger(EthNetworkAPI.class);
 
     @Override
-    public void createAndPublishContract(ContractDO contractContents, String cid) {
+    public CompletableFuture<TransactionReceipt> createAndPublishContract(ContractDO contractContents, String cid) {
         //TODO investigate how to create wallets on the go
         //Optional<File> walletFileLocation = Optional.of(new File(env.getProperty("employee.wallet.location")));
+        //   createWallet(password, walletFileLocation.orElseThrow(FileNotFoundException::new));
+
         Web3j web3 = getConnection();
-        try {
-         //   createWallet(password, walletFileLocation.orElseThrow(FileNotFoundException::new));
-            EthGetTransactionCount ethGetTransactionCount = web3.ethGetTransactionCount(credentials.getAddress(), DefaultBlockParameterName.PENDING).send();
+        TransactionManager transactionManager = new ClientTransactionManager(web3, contractContents.getCompanyWalletAddr());
 
-            BigInteger nonce =  ethGetTransactionCount.getTransactionCount();
-            String encodedConstructor =
-                    FunctionEncoder.encodeConstructor(
-                            Arrays.asList(
-                                    new Utf8String(cid),
-                                    new Utf8String(contractContents.getEmployeeName()),
-                                    new Utf8String(contractContents.getEmployeeSur()),
-                                    new Utf8String(contractContents.getCountryOfResidence()),
-                                    new Utf8String(contractContents.getContractDetails().getPaymentTerm().term),
-                                    new Uint256(contractContents.getContractDetails().getContractExpiry().toEpochSecond())
-                            )
-                    );
-                    web3.ethEstimateGas(Transaction.createContractTransaction(
-                            contractContents.getAddress(),
-                            nonce,
-                            DefaultGasProvider.GAS_PRICE,
-                            DefaultGasProvider.GAS_LIMIT,
-                            encodedConstructor
-                            )).sendAsync();
-
-
-            );
-
-            logger.debug("transaction hash = {}", transaction.getTransactionHash());
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
+        return EmploymentContract_sol_EmploymentContract.deploy(
+                web3,
+                transactionManager,
+                new DefaultGasProvider(),
+                cid,
+                contractContents.getEmployeeName(),
+                contractContents.getEmployeeSur(),
+                contractContents.getCountryOfResidence(),
+                contractContents.getContractDetails().getPaymentTerm().term,
+                contractContents.getContractDetails().getBalanceUnit().unit,
+                BigInteger.valueOf(contractContents.getContractDetails().getContractExpiry().toEpochSecond())
+        ).sendAsync().thenApply(contract -> {
+            logger.debug("receiving contract receipt...");
+            TransactionReceipt receipt = null;
+            try {
+                receipt = contract.getTransactionReceipt().orElseThrow(
+                        () -> new TransactionException("Employment contract was not created.")
+                );
+            } catch (TransactionException e) {
+                e.getMessage();
+            }
+            logger.debug("received transaction receipt: "+receipt);
+            return receipt;
+        });
     }
 
     @Override
@@ -93,5 +99,6 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
             e.printStackTrace();
         }
     }
+
 
 }

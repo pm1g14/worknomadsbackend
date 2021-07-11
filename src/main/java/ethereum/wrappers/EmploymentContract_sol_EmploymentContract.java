@@ -116,7 +116,7 @@ public class EmploymentContract_sol_EmploymentContract extends Contract {
                 new org.web3j.abi.datatypes.Utf8String(_surname),
                 new org.web3j.abi.datatypes.Utf8String(_country),
                 new org.web3j.abi.datatypes.Utf8String(_salaryTerm),
-                new org.web3j.abi.datatypes.Utf8String(_balanceUnit), 
+                new org.web3j.abi.datatypes.Utf8String(_balanceUnit),
                 new Uint256(_expiryTimestamp)));
         return deployRemoteCall(EmploymentContract_sol_EmploymentContract.class, web3j, transactionManager, contractGasProvider, BINARY, encodedConstructor);
     }

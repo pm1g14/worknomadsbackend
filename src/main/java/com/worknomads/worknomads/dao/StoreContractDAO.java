@@ -4,5 +4,5 @@ import com.worknomads.worknomads.dos.ContractDO;
 
 public interface StoreContractDAO {
 
-    boolean storeContractDetails(ContractDO contractDO);
+    boolean storeContractDetails(ContractDO contractDO, String receipt);
 }

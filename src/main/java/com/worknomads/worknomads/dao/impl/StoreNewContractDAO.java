@@ -10,7 +10,7 @@ public class StoreNewContractDAO implements StoreContractDAO {
 
 
     @Override
-    public boolean storeContractDetails(ContractDetailsDO contractDetailsDO) {
+    public boolean storeContractDetails(ContractDO contractDO, String receipt) {
         return false;
     }
 }

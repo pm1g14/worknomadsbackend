@@ -5,6 +5,7 @@ import com.worknomads.worknomads.dos.ContractDO;
 import com.worknomads.worknomads.dos.ContractDetailsDO;
 import com.worknomads.worknomads.dtos.ContractDTO;
 import com.worknomads.worknomads.dtos.ContractDetailsDTO;
+import com.worknomads.worknomads.enums.BalanceUnit;
 import com.worknomads.worknomads.enums.ContractPaymentTerm;
 import org.springframework.stereotype.Component;
 
@@ -40,8 +41,8 @@ public class CreateContractInputAdapter implements InputAdapter<ContractDTO, Con
                 new Locale(contractDetailsDTO.getRemoteLocation()),
                 contractDetailsDTO.getGrossSalary(),
                 contractDetailsDTO.getPaymentInstallments(),
-                ContractPaymentTerm.valueOf(contractDetailsDTO.getPaymentTerm())
-
+                ContractPaymentTerm.valueOf(contractDetailsDTO.getPaymentTerm()),
+                BalanceUnit.valueOf(contractDetailsDTO.getBalanceUnit())
         );
         return contractDetailsDO;
     }
