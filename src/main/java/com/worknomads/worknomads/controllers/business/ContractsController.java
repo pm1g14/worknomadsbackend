@@ -8,8 +8,10 @@ import com.worknomads.worknomads.validators.InputValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import java.util.Collections;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 public class ContractsController {
@@ -24,14 +26,14 @@ public class ContractsController {
 
     @RequestMapping(value = "/app/v1/{companyId}/contracts/create", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void createContract(
+    public boolean createContract(
        @PathVariable("companyId") String cid,
-       @RequestBody ContractDTO contract) {
+       @RequestBody ContractDTO contract) throws ExecutionException, InterruptedException {
 
             if (validator.validate(contract)) {
-                service.createContract(contract, cid);
+                return service.createContract(contract, cid);
             }
-
+            return false;
     }
 
 
@@ -52,4 +54,11 @@ public class ContractsController {
 
         return retrieveContractsService.retrieveContract(cid, eid);
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    private String contractNotCreated(TransactionReceipt ex) {
+        return "";
+    }
+
 }

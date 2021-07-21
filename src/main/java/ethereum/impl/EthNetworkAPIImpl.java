@@ -7,38 +7,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
-import org.web3j.abi.FunctionEncoder;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Uint;
-import org.web3j.abi.datatypes.Utf8String;
-import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.CipherException;
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.RemoteCall;
-import org.web3j.protocol.core.methods.request.Transaction;
-import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
-import org.web3j.tx.ChainId;
 import org.web3j.tx.ClientTransactionManager;
-import org.web3j.tx.RawTransactionManager;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.DefaultGasProvider;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.util.Arrays;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public class EthNetworkAPIImpl implements EthNetworkAPI {
@@ -68,19 +51,7 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
                 contractContents.getContractDetails().getPaymentTerm().term,
                 contractContents.getContractDetails().getBalanceUnit().unit,
                 BigInteger.valueOf(contractContents.getContractDetails().getContractExpiry().toEpochSecond())
-        ).sendAsync().thenApply(contract -> {
-            logger.debug("receiving contract receipt...");
-            TransactionReceipt receipt = null;
-            try {
-                receipt = contract.getTransactionReceipt().orElseThrow(
-                        () -> new TransactionException("Employment contract was not created.")
-                );
-            } catch (TransactionException e) {
-                e.getMessage();
-            }
-            logger.debug("received transaction receipt: "+receipt);
-            return receipt;
-        });
+        ).sendAsync().thenApply(this::tryGettingReceiptOrThrow);
     }
 
     @Override
@@ -100,5 +71,19 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
         }
     }
 
+
+    private TransactionReceipt tryGettingReceiptOrThrow(EmploymentContract_sol_EmploymentContract contract) {
+        logger.debug("receiving contract receipt...");
+        TransactionReceipt receipt = null;
+        try {
+            receipt = contract.getTransactionReceipt().orElseThrow(
+                    () -> new TransactionException("Employment contract was not created.")
+            );
+        } catch (TransactionException e) {
+            e.getMessage();
+        }
+        logger.debug("received transaction receipt: "+receipt);
+        return receipt;
+    }
 
 }
