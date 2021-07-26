@@ -1,6 +1,9 @@
 package ethereum.impl;
 
+import com.worknomads.worknomads.adapters.InputAdapter;
 import com.worknomads.worknomads.dos.ContractDO;
+import com.worknomads.worknomads.dos.ContractDOs;
+import com.worknomads.worknomads.dos.RetrievedContractDO;
 import ethereum.EthNetworkAPI;
 import ethereum.wrappers.EmploymentContract_sol_EmploymentContract;
 import org.slf4j.Logger;
@@ -29,6 +32,10 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
 
     @Autowired
     private Environment env;
+
+    @Autowired
+    private InputAdapter<EmploymentContract_sol_EmploymentContract, ContractDOs> daoAdapter;
+
     private Logger logger = LoggerFactory.getLogger(EthNetworkAPI.class);
 
     @Override
@@ -52,6 +59,11 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
                 contractContents.getContractDetails().getBalanceUnit().unit,
                 BigInteger.valueOf(contractContents.getContractDetails().getContractExpiry().toEpochSecond())
         ).sendAsync().thenApply(this::tryGettingReceiptOrThrow);
+    }
+
+    @Override
+    public CompletableFuture<RetrievedContractDO> getContractDetailsFromAddress(String contractAddress) {
+        return null;
     }
 
     @Override

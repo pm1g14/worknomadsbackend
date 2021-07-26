@@ -8,6 +8,7 @@ public final class ContractDetailsDTO {
     private final int paymentInstallments;
     private final String paymentTerm;
     private final String balanceUnit;
+    //
 
     public ContractDetailsDTO(String contractExpiry, String remoteLocation, double grossSalary, int paymentInstallments, String paymentTerm, String balanceUnit) {
         this.contractExpiry = contractExpiry;

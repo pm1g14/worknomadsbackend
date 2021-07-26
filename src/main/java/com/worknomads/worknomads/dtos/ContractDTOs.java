@@ -5,15 +5,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Collections;
 import java.util.List;
 
-public final class ContractDTOList {
+public final class ContractDTOs {
 
-    @JsonProperty(namespace = "contractList") private final List<ContractDTO> contractList;
+    @JsonProperty(namespace = "contractList") private final List<RetrievedContractDTO> contractList;
 
-    public ContractDTOList(List<ContractDTO> contractList) {
+    public ContractDTOs(List<RetrievedContractDTO> contractList) {
         this.contractList = contractList;
     }
 
-    public List<ContractDTO> getContractList() {
+    public List<RetrievedContractDTO> getContractList() {
         return Collections.unmodifiableList(contractList);
     }
 }

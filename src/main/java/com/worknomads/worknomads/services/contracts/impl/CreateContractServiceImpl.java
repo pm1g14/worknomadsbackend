@@ -27,9 +27,9 @@ public class CreateContractServiceImpl implements CreateContractService {
 
     @Override
     public boolean createContract(ContractDTO contract, String cid) throws ExecutionException, InterruptedException {
-        var contractDO = adapter.mapDTOtoDO(contract);
-        return ethNetworkService.createAndPublishContract(contractDO, cid)
-                .thenApply(receipt -> dao.storeContractDetails(contractDO, receipt.toString())).get();
+        var contractDOOptional = adapter.mapDTOtoDO(contract);
+        return contractDOOptional.isPresent() ? ethNetworkService.createAndPublishContract(contractDOOptional.get(), cid)
+                .thenApply(receipt -> dao.storeContractDetails(contractDOOptional.get(), receipt.toString())).get() : false;
 
     }
 }

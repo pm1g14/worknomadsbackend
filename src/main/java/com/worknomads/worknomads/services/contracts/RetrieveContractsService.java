@@ -1,10 +1,11 @@
 package com.worknomads.worknomads.services.contracts;
 
-import com.worknomads.worknomads.dtos.ContractDTO;
+import com.worknomads.worknomads.dtos.ContractDTOs;
+import com.worknomads.worknomads.dtos.RetrievedContractDTO;
 
 public interface RetrieveContractsService {
 
-    void retrieveContracts(String cid);
+    ContractDTOs retrieveContracts(String walletAddress);
 
-    ContractDTO retrieveContract(String cid, String eid);
+    RetrievedContractDTO retrieveContract(String cid, String eid);
 }
