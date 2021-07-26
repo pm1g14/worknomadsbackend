@@ -13,6 +13,11 @@ public final class ContractDTO {
     @JsonProperty(namespace = "companyWalletAddress") private final String companyWalletAddress;
     @JsonProperty(namespace = "employeeWalletAddress") private final String employeeWalletAddress;
     @JsonProperty(namespace="contractDetails") private final ContractDetailsDTO contractDetails;
+    //contractAddress
+    //term payment
+    //remaining balance (in contract) --> or remaining balance in company wallet
+    //company wallet --> contract --> employee wallet
+
 
     public ContractDTO(String employeeName, String employeeSur, String address, String country, String email, String phoneNum, String senderWalletAddr, ContractDetailsDTO contractDetails, String employeeWalletAddress) {
         this.employeeName = employeeName;

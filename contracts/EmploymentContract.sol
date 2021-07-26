@@ -29,6 +29,14 @@ contract EmploymentContract {
             populateTermMapping();
     }
 
+    event Received(address addr, uint amount);
+
+    receive() external payable {
+        emit Received(msg.sender, msg.value);
+    }
+
+    fallback() external payable{}
+
     function addFunds(uint256 newFunds, string memory fundsUnit) public payable {
         require(newFunds >= 0 && keccak256(abi.encodePacked(balanceUnit)) == keccak256(abi.encodePacked(fundsUnit)), "Invalid funds value passed or passed unit doesn't match with balance unit, action cancelled.");
         require(!isActiveContract(), "Cannot add funds to expired contract");

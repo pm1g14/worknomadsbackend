@@ -3,15 +3,15 @@ package com.worknomads.worknomads.dos;
 import java.util.Collections;
 import java.util.List;
 
-public class ContractDOList {
+public class ContractDOs {
 
-    private final List<ContractDO> contractList;
+    private final List<RetrievedContractDO> contractList;
 
-    public ContractDOList(List<ContractDO> contractList) {
+    public ContractDOs(List<RetrievedContractDO> contractList) {
         this.contractList = contractList;
     }
 
-    public List<ContractDO> getContractList() {
+    public List<RetrievedContractDO> getContractList() {
         return Collections.unmodifiableList(contractList);
     }
 }

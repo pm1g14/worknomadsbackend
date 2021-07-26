@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Optional;
 
 @Component
 public class CreateContractInputAdapter implements InputAdapter<ContractDTO, ContractDO> {
@@ -19,8 +20,8 @@ public class CreateContractInputAdapter implements InputAdapter<ContractDTO, Con
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
 
     @Override
-    public ContractDO mapDTOtoDO(ContractDTO dto) {
-        return new ContractDO(
+    public Optional<ContractDO> mapDTOtoDO(ContractDTO dto) {
+        return Optional.of(new ContractDO(
                 dto.getEmployeeName(),
                 dto.getEmployeeSur(),
                 dto.getAddress(),
@@ -30,7 +31,12 @@ public class CreateContractInputAdapter implements InputAdapter<ContractDTO, Con
                 dto.getCompanyWalletAddress(),
                 dto.getEmployeeWalletAddress(),
                 getContractDetailsDOFromDTO(dto)
-        );
+        ));
+    }
+
+    @Override
+    public Optional<ContractDTO> mapDOtoDTO(ContractDO Do) {
+        return Optional.empty();
     }
 
 

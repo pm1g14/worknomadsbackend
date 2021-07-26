@@ -1,6 +1,14 @@
 package com.worknomads.worknomads.adapters;
 
+import java.util.Optional;
+
 public interface InputAdapter<T, U> {
 
-    U mapDTOtoDO(T dto);
+    default Optional<U> mapDTOtoDO(T dto) {
+        return Optional.empty();
+    }
+
+    default Optional<T> mapDOtoDTO(U Do) {
+        return Optional.empty();
+    }
 }

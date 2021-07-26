@@ -1,7 +1,8 @@
 package com.worknomads.worknomads.controllers.business;
 
 import com.worknomads.worknomads.dtos.ContractDTO;
-import com.worknomads.worknomads.dtos.ContractDTOList;
+import com.worknomads.worknomads.dtos.ContractDTOs;
+import com.worknomads.worknomads.dtos.RetrievedContractDTO;
 import com.worknomads.worknomads.services.contracts.CreateContractService;
 import com.worknomads.worknomads.services.contracts.RetrieveContractsService;
 import com.worknomads.worknomads.validators.InputValidator;
@@ -37,18 +38,19 @@ public class ContractsController {
     }
 
 
-    @RequestMapping(value = "/app/v1/{companyId}/contracts/get", method = RequestMethod.GET)
+    @RequestMapping(value = "/app/v1/{walletAddress}/contracts/get", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ContractDTOList getAllContracts(@PathVariable("companyId") String cid) {
-        return new ContractDTOList(Collections.emptyList());
+    public ContractDTOs getAllContracts(@PathVariable("walletAddress") String walletAddress) {
+        retrieveContractsService.retrieveContracts(walletAddress);
+        return new ContractDTOs(Collections.emptyList());
 
     }
 
-
+    //TODO change this to contracts/{contractAddr} and remove companyId and employeeId
     @RequestMapping(value = "/app/v1/{companyId}/employeeId/{employeeId}/contract/get", method = RequestMethod.GET)
     @ResponseBody
-    public ContractDTO getContractForId(
+    public RetrievedContractDTO getContractForId(
        @PathVariable("companyId") String cid,
        @PathVariable("employeeId") String eid) {
 
