@@ -4,12 +4,13 @@ pragma solidity ^0.8.6;
 
 contract EmploymentContract {
 
+    string public employeeName;
+    uint256 public employeeSalary;
+    string public employeeEmail;
+    string public employeeSur;
+    string public paymentTerm;
     string private companyId;
-    string private employeeName;
-    ufixed private employeeSalary;
     string private employeeSalaryUnit;
-    string private employeeSur;
-    string private paymentTerm;
     string private country;
 
     string private balanceUnit;
@@ -18,7 +19,7 @@ contract EmploymentContract {
     mapping(string => uint) private termMapping;
 
 
-    constructor(string memory _cid,string memory _name, string memory _surname, string memory _country, string memory _salaryTerm, string memory _balanceUnit, uint256 _expiryTimestamp) {
+    constructor(string memory _cid,string memory _name, string memory _email, string memory _surname, string memory _country, string memory _salaryTerm, string memory _balanceUnit, uint256 _expiryTimestamp) {
             companyId = _cid;
             employeeName = _name;
             employeeSur = _surname;
@@ -26,6 +27,7 @@ contract EmploymentContract {
             paymentTerm = _salaryTerm;
             balanceUnit = _balanceUnit;
             expiryTimestamp = _expiryTimestamp;
+            employeeEmail = _email;
             populateTermMapping();
     }
 
@@ -57,13 +59,14 @@ contract EmploymentContract {
         return address(this).balance;
     }
 
+
     function transferFunds(uint256 amount, address payable toWallet) public {
         address senderAddr = msg.sender;
         require(toWallet != senderAddr && amount <= getBalance(), "The sender and receiver addresses cannot be the same");
         toWallet.transfer(amount);
     }
 
-    function isActiveContract() private view returns (bool){
+    function isActiveContract() public view returns(bool){
         return block.timestamp < expiryTimestamp; //TODO implement a safer way because a miner could change the contract's block.timestamp
     }
 }

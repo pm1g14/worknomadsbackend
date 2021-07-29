@@ -2,7 +2,6 @@ package ethereum.impl;
 
 import com.worknomads.worknomads.adapters.InputAdapter;
 import com.worknomads.worknomads.dos.ContractDO;
-import com.worknomads.worknomads.dos.ContractDOs;
 import com.worknomads.worknomads.dos.RetrievedContractDO;
 import ethereum.EthNetworkAPI;
 import ethereum.wrappers.EmploymentContract_sol_EmploymentContract;
@@ -25,6 +24,7 @@ import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public class EthNetworkAPIImpl implements EthNetworkAPI {
@@ -34,7 +34,7 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
     private Environment env;
 
     @Autowired
-    private InputAdapter<EmploymentContract_sol_EmploymentContract, ContractDOs> daoAdapter;
+    private InputAdapter<EmploymentContract_sol_EmploymentContract, RetrievedContractDO> daoAdapter;
 
     private Logger logger = LoggerFactory.getLogger(EthNetworkAPI.class);
 
@@ -53,6 +53,7 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
                 new DefaultGasProvider(),
                 cid,
                 contractContents.getEmployeeName(),
+                contractContents.getEmail(),
                 contractContents.getEmployeeSur(),
                 contractContents.getCountryOfResidence(),
                 contractContents.getContractDetails().getPaymentTerm().term,
@@ -62,8 +63,17 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
     }
 
     @Override
-    public CompletableFuture<RetrievedContractDO> getContractDetailsFromAddress(String contractAddress) {
-        return null;
+    public RetrievedContractDO getContractDetailsFromAddress(String contractAddress) {
+        Web3j web3 = getConnection();
+
+        TransactionManager transactionManager = new ClientTransactionManager(web3, contractAddress);
+
+        logger.debug("Getting contract from address: "+contractAddress);
+
+        EmploymentContract_sol_EmploymentContract contract = EmploymentContract_sol_EmploymentContract.load(
+                contractAddress, web3, transactionManager, new DefaultGasProvider());
+        Optional<RetrievedContractDO> retrievedContract = daoAdapter.mapDTOtoDO(contract);
+        return retrievedContract.orElseThrow(IllegalArgumentException::new);
     }
 
     @Override

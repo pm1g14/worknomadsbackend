@@ -13,11 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 @Service
 public class RetrieveContractsServiceImpl implements RetrieveContractsService {
@@ -34,21 +31,15 @@ public class RetrieveContractsServiceImpl implements RetrieveContractsService {
     @Override
     public ContractDTOs retrieveContracts(String walletAddress) {
         List<String> addresses = dao.retrieveContractAddressesForWallet(walletAddress);
-        List<CompletableFuture<RetrievedContractDO>> contractFutures = new ArrayList<>();
+        List<RetrievedContractDO> contracts = new ArrayList<>();
         for (String address: addresses) {
             if (address != null) {
-                contractFutures.add(ethNetworkService.getContractDetailsFromAddress(address));
+                contracts.add(ethNetworkService.getContractDetailsFromAddress(address));
             }
         }
-        CompletableFuture<Void> allFutures = CompletableFuture.allOf(
-                contractFutures.toArray(new CompletableFuture[contractFutures.size()])
-        );
-        List<RetrievedContractDO> contracts = allFutures.thenApply((
-                v -> contractFutures.stream().map(CompletableFuture::join).collect(Collectors.toList())
-        )).join();
 
         Optional<ContractDTOs> contractDTOsOpt = ioAdapter.mapDOtoDTO(new ContractDOs(contracts));
-        return contractDTOsOpt.orElse(null);
+        return contractDTOsOpt.orElseThrow(IllegalArgumentException::new);
     }
 
     @Override
