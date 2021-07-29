@@ -1,10 +1,7 @@
 package ethereum;
 
 import com.worknomads.worknomads.dos.ContractDO;
-import com.worknomads.worknomads.dos.ContractDOs;
 import com.worknomads.worknomads.dos.RetrievedContractDO;
-import com.worknomads.worknomads.dtos.RetrievedContractDTO;
-import ethereum.wrappers.EmploymentContract_sol_EmploymentContract;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
@@ -22,7 +19,7 @@ public interface EthNetworkAPI {
 
     CompletableFuture<TransactionReceipt> createAndPublishContract(ContractDO contractContents, String cid);
 
-    CompletableFuture<RetrievedContractDO> getContractDetailsFromAddress(String contractAddress);
+    RetrievedContractDO getContractDetailsFromAddress(String contractAddress);
 
     void createWallet(String password, File location);
 
