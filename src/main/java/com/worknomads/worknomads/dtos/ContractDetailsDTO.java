@@ -1,5 +1,12 @@
 package com.worknomads.worknomads.dtos;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public final class ContractDetailsDTO {
 
     private final String contractExpiry;
@@ -8,9 +15,15 @@ public final class ContractDetailsDTO {
     private final int paymentInstallments;
     private final String paymentTerm;
     private final String balanceUnit;
-    //
 
-    public ContractDetailsDTO(String contractExpiry, String remoteLocation, double grossSalary, int paymentInstallments, String paymentTerm, String balanceUnit) {
+    @JsonCreator
+    public ContractDetailsDTO(
+            @JsonProperty("contractExpiry") String contractExpiry,
+            @JsonProperty("remoteLocation") String remoteLocation,
+            @JsonProperty("grossSalary") double grossSalary,
+            @JsonProperty("paymentInstallments") int paymentInstallments,
+            @JsonProperty("paymentTerm") String paymentTerm,
+            @JsonProperty("balanceUnit") String balanceUnit) {
         this.contractExpiry = contractExpiry;
         this.grossSalary = grossSalary;
         this.remoteLocation = remoteLocation;

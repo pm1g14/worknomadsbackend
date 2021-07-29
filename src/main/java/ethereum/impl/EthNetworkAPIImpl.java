@@ -105,6 +105,7 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
             e.getMessage();
         }
         logger.debug("received transaction receipt: "+receipt);
+        logger.debug("contract deployed in: "+contract.getContractAddress());
         return receipt;
     }
 

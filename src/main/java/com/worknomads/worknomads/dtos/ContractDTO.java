@@ -1,25 +1,36 @@
 package com.worknomads.worknomads.dtos;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public final class ContractDTO {
 
-    @JsonProperty(namespace="employeeName") private final String employeeName;
-    @JsonProperty(namespace="employeeSur") private final String employeeSur;
-    @JsonProperty(namespace="address") private final String address;
-    @JsonProperty(namespace="countryOfResidence") private final String countryOfResidence;
-    @JsonProperty(namespace="email") private final String email;
-    @JsonProperty(namespace="phoneNum") private final String phoneNum;
-    @JsonProperty(namespace = "companyWalletAddress") private final String companyWalletAddress;
-    @JsonProperty(namespace = "employeeWalletAddress") private final String employeeWalletAddress;
-    @JsonProperty(namespace="contractDetails") private final ContractDetailsDTO contractDetails;
-    //contractAddress
-    //term payment
-    //remaining balance (in contract) --> or remaining balance in company wallet
-    //company wallet --> contract --> employee wallet
+    private final String employeeName;
+    private final String employeeSur;
+    private final String address;
+    private final String countryOfResidence;
+    private final String email;
+    private final String phoneNum;
+    private final String companyWalletAddress;
+    private final String employeeWalletAddress;
+    private final ContractDetailsDTO contractDetails;
 
 
-    public ContractDTO(String employeeName, String employeeSur, String address, String country, String email, String phoneNum, String senderWalletAddr, ContractDetailsDTO contractDetails, String employeeWalletAddress) {
+    @JsonCreator
+    public ContractDTO(
+            @JsonProperty("employeeName") String employeeName,
+            @JsonProperty("employeeSur") String employeeSur,
+            @JsonProperty("address") String address,
+            @JsonProperty("countryOfResidence") String country,
+            @JsonProperty("email") String email,
+            @JsonProperty("phoneNum") String phoneNum,
+            @JsonProperty("companyWalletAddress") String senderWalletAddr,
+            @JsonProperty("contractDetails") ContractDetailsDTO contractDetails,
+            @JsonProperty("employeeWalletAddress") String employeeWalletAddress) {
         this.employeeName = employeeName;
         this.address = address;
         this.employeeSur = employeeSur;

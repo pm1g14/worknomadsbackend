@@ -57,10 +57,10 @@ public class ContractsController {
         return retrieveContractsService.retrieveContract(cid, eid);
     }
 
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    private String contractNotCreated(TransactionReceipt ex) {
-        return "";
-    }
+//    @ExceptionHandler
+//    @ResponseStatus(HttpStatus.NOT_FOUND)
+//    private String contractNotCreated(TransactionReceipt ex) {
+//        return "";
+//    }
 
 }
