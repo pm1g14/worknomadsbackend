@@ -1,8 +1,7 @@
 package com.worknomads.worknomads.controllers.business;
 
-import com.worknomads.worknomads.dtos.ContractDTO;
-import com.worknomads.worknomads.dtos.ContractDTOs;
-import com.worknomads.worknomads.dtos.RetrievedContractDTO;
+import com.worknomads.worknomads.dtos.*;
+import com.worknomads.worknomads.services.PayContractService;
 import com.worknomads.worknomads.services.contracts.CreateContractService;
 import com.worknomads.worknomads.services.contracts.RetrieveContractsService;
 import com.worknomads.worknomads.validators.InputValidator;
@@ -24,6 +23,8 @@ public class ContractsController {
     private CreateContractService service;
     @Autowired
     private RetrieveContractsService retrieveContractsService;
+    @Autowired
+    private PayContractService payService;
 
     @RequestMapping(value = "/app/v1/{companyId}/contracts/create", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
@@ -42,12 +43,11 @@ public class ContractsController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public ContractDTOs getAllContracts(@PathVariable("walletAddress") String walletAddress) {
-        retrieveContractsService.retrieveContracts(walletAddress);
-        return new ContractDTOs(Collections.emptyList());
+        return retrieveContractsService.retrieveContracts(walletAddress);
 
     }
 
-    //TODO change this to contracts/{contractAddr} and remove companyId and employeeId
+
     @RequestMapping(value = "/app/v1/{companyId}/employeeId/{employeeId}/contract/get", method = RequestMethod.GET)
     @ResponseBody
     public RetrievedContractDTO getContractForId(
@@ -57,10 +57,18 @@ public class ContractsController {
         return retrieveContractsService.retrieveContract(cid, eid);
     }
 
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.NOT_FOUND)
-//    private String contractNotCreated(TransactionReceipt ex) {
-//        return "";
-//    }
+
+    @RequestMapping(value = "app/v1/contract/pay", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean payContract(@RequestBody PayContractDTO payContractDetails) {
+        return payService.payContract(payContractDetails);
+    }
+
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    private String contractNotCreated(TransactionReceipt ex) {
+        return "The contract was not created";
+    }
 
 }

@@ -9,12 +9,15 @@ import com.worknomads.worknomads.dtos.RetrievedContractDTO;
 import com.worknomads.worknomads.services.contracts.RetrieveContractsService;
 import ethereum.EthNetworkAPI;
 import ethereum.impl.EthNetworkAPIImpl;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
+
 
 @Service
 public class RetrieveContractsServiceImpl implements RetrieveContractsService {
@@ -26,6 +29,7 @@ public class RetrieveContractsServiceImpl implements RetrieveContractsService {
     private RetrieveContractsIOAdapter ioAdapter;
 
     private EthNetworkAPI ethNetworkService = new EthNetworkAPIImpl();
+    private Logger logger = LoggerFactory.getLogger(RetrieveContractsServiceImpl.class);
 
 
     @Override
@@ -34,7 +38,12 @@ public class RetrieveContractsServiceImpl implements RetrieveContractsService {
         List<RetrievedContractDO> contracts = new ArrayList<>();
         for (String address: addresses) {
             if (address != null) {
-                contracts.add(ethNetworkService.getContractDetailsFromAddress(address));
+                try {
+                    RetrievedContractDO retrievedContract = ethNetworkService.getContractDetailsFromAddress(address);
+                    contracts.add(retrievedContract);
+                } catch (IllegalArgumentException ex){
+                    logger.debug("Contract at address "+ address + " has invalid values. Ignoring...");
+                }
             }
         }
 

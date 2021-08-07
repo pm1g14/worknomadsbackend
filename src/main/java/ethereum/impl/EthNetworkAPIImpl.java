@@ -1,6 +1,7 @@
 package ethereum.impl;
 
 import com.worknomads.worknomads.adapters.InputAdapter;
+import com.worknomads.worknomads.adapters.impl.RetrieveContractsDAOAdapter;
 import com.worknomads.worknomads.dos.ContractDO;
 import com.worknomads.worknomads.dos.RetrievedContractDO;
 import ethereum.EthNetworkAPI;
@@ -12,6 +13,7 @@ import org.springframework.core.env.Environment;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.tx.ClientTransactionManager;
@@ -34,7 +36,7 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
     private Environment env;
 
     @Autowired
-    private InputAdapter<EmploymentContract_sol_EmploymentContract, RetrievedContractDO> daoAdapter;
+    private InputAdapter<EmploymentContract_sol_EmploymentContract, RetrievedContractDO> daoAdapter = new RetrieveContractsDAOAdapter();
 
     private Logger logger = LoggerFactory.getLogger(EthNetworkAPI.class);
 
@@ -73,7 +75,7 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
         EmploymentContract_sol_EmploymentContract contract = EmploymentContract_sol_EmploymentContract.load(
                 contractAddress, web3, transactionManager, new DefaultGasProvider());
         Optional<RetrievedContractDO> retrievedContract = daoAdapter.mapDTOtoDO(contract);
-        return retrievedContract.orElseThrow(IllegalArgumentException::new);
+        return retrievedContract.orElseThrow(() -> new IllegalArgumentException("One or more fields of the retrieved contract are invalid."));
     }
 
     @Override
@@ -91,6 +93,34 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public CompletableFuture<TransactionReceipt> payContract(String contractAddress, BigInteger amount, String toWallet) {
+        Web3j web3 = getConnection();
+
+        TransactionManager transactionManager = new ClientTransactionManager(web3, contractAddress);
+
+        logger.debug("Getting contract from address: "+contractAddress);
+
+        EmploymentContract_sol_EmploymentContract contract = EmploymentContract_sol_EmploymentContract.load(
+                contractAddress, web3, transactionManager, new DefaultGasProvider());
+
+        logger.debug("Retrieved contract, attempting to pay amount to wallet: "+toWallet);
+        return contract.transferFunds(amount, toWallet).sendAsync().thenApply((TransactionReceipt contract1) -> tryGettingPaymentReceiptOrThrow(contract));
+    }
+
+
+    private TransactionReceipt tryGettingPaymentReceiptOrThrow(EmploymentContract_sol_EmploymentContract contract) {
+        logger.debug("receiving contract receipt...");
+        TransactionReceipt receipt = null;
+        try {
+            receipt = contract.getTransactionReceipt().orElseThrow(() -> new TransactionException("contract payment was not successful"));
+        } catch (TransactionException e) {
+            e.getMessage();
+        }
+        logger.debug("received transaction receipt: "+receipt);
+        return receipt;
     }
 
 

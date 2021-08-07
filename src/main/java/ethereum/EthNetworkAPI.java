@@ -7,6 +7,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 
 import java.io.File;
+import java.math.BigInteger;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -22,5 +23,7 @@ public interface EthNetworkAPI {
     RetrievedContractDO getContractDetailsFromAddress(String contractAddress);
 
     void createWallet(String password, File location);
+
+    CompletableFuture<TransactionReceipt> payContract(String contractAddress, BigInteger amount, String toWallet);
 
 }
