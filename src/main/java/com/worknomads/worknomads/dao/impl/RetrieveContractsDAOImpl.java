@@ -13,7 +13,7 @@ public class RetrieveContractsDAOImpl implements RetrieveContractsDAO {
     public List<String> retrieveContractAddressesForWallet(String walletAddress) {
         //TODO actual implementation
         ArrayList<String> results = new ArrayList<>();
-        results.add("0xd8b934580fcE35a11B58C6D73aDeE468a2833fa8");
+        results.add("0x0ffc6b8d803fe1f632c04188e8bdcf59c3a003a0");
         return results;
     }
 }

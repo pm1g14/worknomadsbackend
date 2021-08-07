@@ -18,3 +18,20 @@ Test data:
       	"balanceUnit": "USD_TETHER"
     }
 }
+
+
+receive contracts request:
+http://localhost:80/app/v1/0xca0fc0957f148497f9e2ce6ed104a550c04d9374/contracts/get
+
+response:
+{
+    "contractList": [{
+        "employeeName": "panos",
+        "employeeSur": "mavr",
+        "employeeEmail": "panamavr@hotmail.com",
+        "term": "Monthly",
+        "nextPaymentAmount": 0.0,
+        "remainingBalance": 1.0E16,
+        "active": false
+    }]
+}

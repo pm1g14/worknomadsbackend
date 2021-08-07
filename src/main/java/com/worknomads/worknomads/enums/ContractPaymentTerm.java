@@ -4,12 +4,12 @@ import org.web3j.abi.datatypes.primitive.Char;
 
 public enum  ContractPaymentTerm {
 
-    DAILY("Daily"),
-    WEEKLY("Weekly"),
-    MONTHLY("Monthly"),
-    QUARTERLY("3 Months"),
-    SEMIANNUALLY("6 Months"),
-    ANNUALLY("Yearly");
+    Daily("Daily"),
+    Weekly("Weekly"),
+    Monthly("Monthly"),
+    Quarterly("3 Months"),
+    Semiannually("6 Months"),
+    Yearly("Yearly");
 
     public final String term;
 
