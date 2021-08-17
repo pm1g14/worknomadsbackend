@@ -1,4 +1,5 @@
 0x0ffc6b8d803fe1f632c04188e8bdcf59c3a003a0 saved contract.
+ saved contract.
 Test data:
 {
 	"employeeName": "panos",
@@ -35,3 +36,18 @@ response:
         "active": false
     }]
 }
+
+payment
+{
+  	"contractAddress": "0x9646fc6ee1b3bf193ca2bcd0d167e0aa2c6244b0",
+	"amount":100.0,
+  	"paymentUnit": "",
+  	"recipientWalletAddress": "0xd69ef3e06faa8b5109f949100c71643a4abdebef"
+}
+
+
+docker: http://192.168.99.100:8090/app/v1/5/contracts/create
+docker run -p 8090:80 panosm/worknomadsbackend
+
+https://rinkeby.etherscan.io/address/0x816f37f9d8088b7ec15808b5c0811b217849614d -> etherscan rinkeby
+C:\Users\panosmav\AppData\Roaming\Ethereum\testnet\keystore

@@ -24,6 +24,6 @@ public interface EthNetworkAPI {
 
     void createWallet(String password, File location);
 
-    CompletableFuture<TransactionReceipt> payContract(String contractAddress, BigInteger amount, String toWallet);
+    String payContract(String contractAddress, BigInteger amount, String toWallet);
 
 }

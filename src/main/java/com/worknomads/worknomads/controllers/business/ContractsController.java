@@ -57,7 +57,8 @@ public class ContractsController {
         return retrieveContractsService.retrieveContract(cid, eid);
     }
 
-
+   // @CrossOrigin(origins = "https://work-nomads.netlify.app")
+  //  @CrossOrigin(origins = "http://localhost:80")
     @RequestMapping(value = "app/v1/contract/pay", method = RequestMethod.POST)
     @ResponseBody
     public boolean payContract(@RequestBody PayContractDTO payContractDetails) {

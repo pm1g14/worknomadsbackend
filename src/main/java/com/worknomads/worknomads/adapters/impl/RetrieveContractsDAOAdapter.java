@@ -6,7 +6,6 @@ import com.worknomads.worknomads.enums.ContractPaymentTerm;
 import ethereum.wrappers.EmploymentContract_sol_EmploymentContract;
 import org.springframework.stereotype.Component;
 
-import javax.swing.text.html.Option;
 import java.math.BigInteger;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;

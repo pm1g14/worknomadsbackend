@@ -12,18 +12,19 @@ public class PayContractDTO {
     private final String contractAddress;
     private final double amount;
     private final String paymentUnit;
-    private final String toWallet;
+    private final String recipientWalletAddress;
+
 
     @JsonCreator
     public PayContractDTO(
             @JsonProperty("contractAddress") String contractAddress,
             @JsonProperty("amount") double amount,
             @JsonProperty("paymentUnit") String paymentUnit,
-            @JsonProperty("toWallet") String toWallet) {
+            @JsonProperty("recipientWalletAddress") String toWallet) {
         this.contractAddress = contractAddress;
         this.amount = amount;
         this.paymentUnit = paymentUnit;
-        this.toWallet = toWallet;
+        this.recipientWalletAddress = toWallet;
     }
 
     public String getContractAddress() {
@@ -38,7 +39,7 @@ public class PayContractDTO {
         return paymentUnit;
     }
 
-    public String getToWallet() {
-        return toWallet;
+    public String getRecipientWalletAddress() {
+        return recipientWalletAddress;
     }
 }
