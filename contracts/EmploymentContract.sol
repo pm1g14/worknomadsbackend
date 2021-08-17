@@ -59,10 +59,14 @@ contract EmploymentContract {
         return address(this).balance;
     }
 
+    function getSenderAddress() public view returns(address) {
+        return msg.sender;
+    }
 
-    function transferFunds(uint256 amount, address payable toWallet) public {
-        address senderAddr = msg.sender;
-        require(toWallet != senderAddr && amount <= getBalance(), "The sender and receiver addresses cannot be the same");
+    function transferFunds(uint256 amount, address payable toWallet) public payable {
+        address thisAddress = address(this);
+        require(toWallet != thisAddress, "The sender and receiver addresses cannot be the same");
+        require(amount <= getBalance(), "Insufficient balance, remaining balance is less than the amount given");
         toWallet.transfer(amount);
     }
 
