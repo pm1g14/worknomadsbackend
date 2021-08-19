@@ -1,6 +1,7 @@
 package com.worknomads.worknomads.services.contracts.impl;
 
 import com.worknomads.worknomads.adapters.io.impl.RetrieveContractsIOAdapter;
+import com.worknomads.worknomads.dao.Contracts2Repository;
 import com.worknomads.worknomads.dao.RetrieveContractsDAO;
 import com.worknomads.worknomads.dos.ContractDOs;
 import com.worknomads.worknomads.dos.RetrievedContractDO;
@@ -28,13 +29,19 @@ public class RetrieveContractsServiceImpl implements RetrieveContractsService {
     @Autowired
     private RetrieveContractsIOAdapter ioAdapter;
 
+    @Autowired
+    private Contracts2Repository contracts2Repository;
+
     private EthNetworkAPI ethNetworkService = new EthNetworkAPIImpl();
     private Logger logger = LoggerFactory.getLogger(RetrieveContractsServiceImpl.class);
 
 
     @Override
     public ContractDTOs retrieveContracts(String walletAddress) {
-        List<String> addresses = dao.retrieveContractAddressesForWallet(walletAddress);
+        var addresses = this.contracts2Repository.findByBusinessPartnerWalletAddress(walletAddress);
+
+//        List<String> addresses = dao.retrieveContractAddressesForWallet(walletAddress);
+
         List<RetrievedContractDO> contracts = new ArrayList<>();
         for (String address: addresses) {
             if (address != null) {
