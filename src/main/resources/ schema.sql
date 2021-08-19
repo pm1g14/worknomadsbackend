@@ -1,34 +1,3 @@
-
-Skip to content
-Pulls
-Issues
-Marketplace
-Explore
-@arisfan87
-pm1g14 /
-worknomadsbackend
-Private
-
-2
-0
-
-    1
-
-Code
-Issues
-Pull requests
-Actions
-Projects
-Security
-
-    Insights
-
-worknomadsbackend/src/main/resources/schema.sql
-arisf Added contracts repo.
-Latest commit 7a26467 1 hour ago
-History
-0 contributors
-48 lines (41 sloc) 2.04 KB
 DROP TABLE IF EXISTS business_partner;
 
 CREATE TABLE business_partner (

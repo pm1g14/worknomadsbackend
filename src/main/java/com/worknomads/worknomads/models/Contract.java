@@ -1,5 +1,7 @@
 package com.worknomads.worknomads.models;
 
+//import javax.persistence.*;
+
 import javax.persistence.*;
 
 @Entity

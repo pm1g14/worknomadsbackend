@@ -75,5 +75,5 @@ public class BusinessPartner {
     }
     public void setWalletAddress(String walletAddress) {
         this.walletAddress = walletAddress;
-    }
+   }
 }
