@@ -15,7 +15,7 @@ public class BusinessPartner {
     private String phone;
 
     @Id
-    private String walletAddress;
+    private String wallet_address;
 
     protected BusinessPartner() {}
 
@@ -25,7 +25,7 @@ public class BusinessPartner {
         this.address = address;
         this.email = email;
         this.phone = phone;
-        this.walletAddress = walletAddress;
+        this.wallet_address = walletAddress;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class BusinessPartner {
     }
 
     public String getWalletAddress() {
-        return walletAddress;
+        return wallet_address;
     }
 
     public void setId(Long id) {
@@ -74,6 +74,6 @@ public class BusinessPartner {
         this.phone = phone;
     }
     public void setWalletAddress(String walletAddress) {
-        this.walletAddress = walletAddress;
+        this.wallet_address = walletAddress;
    }
 }
