@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS employee;
 DROP TABLE IF EXISTS business_partner;
-DROP TABLE IF EXISTS contracts;
+DROP TABLE IF EXISTS smart_contract;
 
 CREATE TABLE business_partner (
 id INTEGER NOT NULL AUTO_INCREMENT,
