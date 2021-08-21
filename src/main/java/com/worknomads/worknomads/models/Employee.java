@@ -30,6 +30,9 @@ public class Employee {
         this.wallet_address = walletAddress;
     }
 
+    public Integer getId() {
+        return id;
+    }
     public String getEmployeeName() {
         return name;
     }
