@@ -1,30 +1,30 @@
 package com.worknomads.worknomads.controllers.models;
 
 public class RegisterEmployeeRequest {
-    private final String employeeName;
-    private final String employeeSur;
-    private final String address;
-    private final String countryOfResidence;
-    private final String email;
-    private final String phoneNum;
-    private final String employeeWalletAddress;
+    private String name;
+    private String surname;
+    private String address;
+    private String countryOfResidence;
+    private String email;
+    private String phoneNum;
+    private String walletAddress;
 
     public RegisterEmployeeRequest(String employeeName, String employeeSur, String address, String countryOfResidence, String email, String phoneNum, String employeeWalletAddress) {
-        this.employeeName = employeeName;
-        this.employeeSur = employeeSur;
+        this.name = employeeName;
+        this.surname = employeeSur;
         this.address = address;
         this.countryOfResidence = countryOfResidence;
         this.email = email;
         this.phoneNum = phoneNum;
-        this.employeeWalletAddress = employeeWalletAddress;
+        this.walletAddress = employeeWalletAddress;
     }
 
-    public String getEmployeeName() {
-        return employeeName;
+    public String getName() {
+        return name;
     }
 
-    public String getEmployeeSur() {
-        return employeeSur;
+    public String getSurname() {
+        return surname;
     }
 
     public String getAddress() {
@@ -43,7 +43,35 @@ public class RegisterEmployeeRequest {
         return phoneNum;
     }
 
-    public String getEmployeeWalletAddress() {
-        return employeeWalletAddress;
+    public String getWalletAddress() {
+        return walletAddress;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setCountryOfResidence(String countryOfResidence) {
+        this.countryOfResidence = countryOfResidence;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+    }
+
+    public void setWalletAddress(String walletAddress) {
+        this.walletAddress = walletAddress;
     }
 }

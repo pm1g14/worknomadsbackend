@@ -12,6 +12,9 @@ public class Contract2DTO {
     private String employee_walletAddress;
     private String business_partner_walletAddress;
 
+    private EmployeeDTO employeeDTO;
+    private BusinessPartnerDTO businessPartnerDTO;
+
     public Contract2DTO(Integer id, String contractExpiry, double grossSalary, String remoteLocation, int paymentInstallments, String paymentTerm, String balanceUnit, String address, String employee_walletAddress, String business_partner_walletAddress) {
         this.id = id;
         this.contractExpiry = contractExpiry;

@@ -8,7 +8,7 @@ public class BusinessPartner {
 
 
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long id;
+    private Integer id;
     private String name;
     private String address;
     private String email;
@@ -34,7 +34,7 @@ public class BusinessPartner {
     }
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -58,7 +58,7 @@ public class BusinessPartner {
         return wallet_address;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
     public void setAddress(String address) {

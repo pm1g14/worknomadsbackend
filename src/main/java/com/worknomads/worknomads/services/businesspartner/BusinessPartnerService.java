@@ -6,6 +6,9 @@ import com.worknomads.worknomads.models.BusinessPartner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class BusinessPartnerService implements IBusinessPartnerService{
 
@@ -26,6 +29,26 @@ public class BusinessPartnerService implements IBusinessPartnerService{
                 businessPartner.get().getPhone(),
                 businessPartner.get().getWalletAddress(),
                 null);
+    }
+
+    @Override
+    public List<BusinessPartnerDTO> getAll() {
+        var businessPartners = this.businessPartnerRepository.findAll().iterator();
+
+        var businessPartnersDTO = new ArrayList<BusinessPartnerDTO>();
+        while (businessPartners.hasNext()) {
+            var nextPartner = businessPartners.next();
+            var partner = new BusinessPartnerDTO();
+            partner.setId(nextPartner.getId());
+            partner.setName(nextPartner.getName());
+            partner.setEmail(nextPartner.getEmail());
+            partner.setAddress(nextPartner.getAddress());
+            partner.setPhone(nextPartner.getPhone());
+            partner.setWalletAddress(nextPartner.getWalletAddress());
+            businessPartnersDTO.add(partner);
+        }
+
+        return businessPartnersDTO;
     }
 
     @Override
