@@ -42,7 +42,7 @@ public class EmployeeService implements IEmployeeService{
 
         var employees = this.employeeRepository.findAll().iterator();
 
-        var actualList = new ArrayList<EmployeeDTO>();
+        var employeesDTO = new ArrayList<EmployeeDTO>();
         while (employees.hasNext()) {
             var nextEmployee = employees.next();
             var employee = new EmployeeDTO();
@@ -55,22 +55,22 @@ public class EmployeeService implements IEmployeeService{
             employee.setPhoneNum(nextEmployee.getPhoneNum());
             employee.setWalletAddress(nextEmployee.getWalletAddress());
 
-            actualList.add(employee);
+            employeesDTO.add(employee);
         }
 
-        return actualList;
+        return employeesDTO;
     }
 
     @Override
     public void createEmployee(EmployeeDTO employeeDTO) {
         this.employeeRepository.save(new Employee(
-                employeeDTO.getEmployeeName(),
-                employeeDTO.getEmployeeSur(),
+                employeeDTO.getName(),
+                employeeDTO.getSurname(),
                 employeeDTO.getAddress(),
                 employeeDTO.getCountryOfResidence(),
                 employeeDTO.getEmail(),
                 employeeDTO.getPhoneNum(),
-                employeeDTO.getEmployeeWalletAddress()));
+                employeeDTO.getWalletAddress()));
     }
 
     @Override
@@ -82,12 +82,12 @@ public class EmployeeService implements IEmployeeService{
     @Override
     public void updateEmployee(EmployeeDTO employeeDTO) {
         this.employeeRepository.save(new Employee(
-                employeeDTO.getEmployeeName(),
-                employeeDTO.getEmployeeSur(),
+                employeeDTO.getName(),
+                employeeDTO.getSurname(),
                 employeeDTO.getAddress(),
                 employeeDTO.getCountryOfResidence(),
                 employeeDTO.getEmail(),
                 employeeDTO.getPhoneNum(),
-                employeeDTO.getEmployeeWalletAddress()));
+                employeeDTO.getWalletAddress()));
     }
 }

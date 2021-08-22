@@ -26,11 +26,11 @@ public class EmployeeDTO {
         return id;
     }
 
-    public String getEmployeeName() {
+    public String getName() {
         return name;
     }
 
-    public String getEmployeeSur() {
+    public String getSurname() {
         return surname;
     }
 
@@ -50,7 +50,7 @@ public class EmployeeDTO {
         return phoneNum;
     }
 
-    public String getEmployeeWalletAddress() {
+    public String getWalletAddress() {
         return walletAddress;
     }
 

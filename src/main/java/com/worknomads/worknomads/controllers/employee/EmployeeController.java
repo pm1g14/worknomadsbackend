@@ -17,24 +17,25 @@ public class EmployeeController {
     @Autowired
     private IEmployeeService employeeService;
 
+    @CrossOrigin(origins = "https://localhost:44333")
     @RequestMapping(value = "/employee/create", method = RequestMethod.POST)
     public ResponseEntity<String> create(@RequestBody final RegisterEmployeeRequest request){
 
         this.employeeService.createEmployee(new EmployeeDTO(
-                request.getEmployeeName(),
-                request.getEmployeeSur(),
+                request.getName(),
+                request.getSurname(),
                 request.getAddress(),
                 request.getCountryOfResidence(),
                 request.getEmail(),
                 request.getPhoneNum(),
-                request.getEmployeeWalletAddress()));
+                request.getWalletAddress()));
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @CrossOrigin(origins = "https://localhost:44333")
     @RequestMapping(value = "/employee/index", method = RequestMethod.GET)
-    public ResponseEntity<List<EmployeeDTO>> getEmployee(){
+    public ResponseEntity<List<EmployeeDTO>> getAll(){
         var result = this.employeeService.getAll();
 
         if (result == null || result.isEmpty())
@@ -46,37 +47,39 @@ public class EmployeeController {
     @CrossOrigin(origins = "https://localhost:44333")
     @RequestMapping(value = "/employee/{walletAddress}", method = RequestMethod.GET)
     public ResponseEntity<EmployeeResponse> getEmployee(@PathVariable String walletAddress){
-        var result = this.employeeService.getEmployeeByWalletAddress(walletAddress);
+        var employee = this.employeeService.getEmployeeByWalletAddress(walletAddress);
 
-        if (result == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (employee == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        var response = new EmployeeResponse(result.getId(),
-                result.getEmployeeName(),
-                result.getEmployeeSur(),
-                result.getAddress(),
-                result.getEmail(),
-                result.getEmployeeWalletAddress(),
-                result.getCountryOfResidence(),
-                result.getPhoneNum());
+        var response = new EmployeeResponse(employee.getId(),
+                employee.getName(),
+                employee.getSurname(),
+                employee.getAddress(),
+                employee.getEmail(),
+                employee.getWalletAddress(),
+                employee.getCountryOfResidence(),
+                employee.getPhoneNum());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "https://localhost:44333")
     @RequestMapping(value = "/employee", method = RequestMethod.PUT)
     public ResponseEntity<Void> updateEmployee(@RequestBody final RegisterEmployeeRequest request){
         this.employeeService.updateEmployee(
                 new EmployeeDTO(
-                        request.getEmployeeName(),
-                        request.getEmployeeSur(),
+                        request.getName(),
+                        request.getSurname(),
                         request.getAddress(),
                         request.getCountryOfResidence(),
                         request.getEmail(),
                         request.getPhoneNum(),
-                        request.getEmployeeWalletAddress()));
+                        request.getWalletAddress()));
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "https://localhost:44333")
     @RequestMapping(value = "/employee/{walletAddress}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteEmployee(@PathVariable String walletAddress){
         this.employeeService.deleteEmployee(walletAddress);
