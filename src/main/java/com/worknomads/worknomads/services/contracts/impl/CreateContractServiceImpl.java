@@ -29,7 +29,7 @@ public class CreateContractServiceImpl implements CreateContractService {
     public boolean createContract(ContractDTO contract, String cid) throws ExecutionException, InterruptedException {
         var contractDOOptional = adapter.mapDTOtoDO(contract);
         return contractDOOptional.isPresent() ? ethNetworkService.createAndPublishContract(contractDOOptional.get(), cid)
-                .thenApply(receipt -> dao.storeContractDetails(contractDOOptional.get(), receipt.toString())).get() : false;
+                .thenApply(receipt -> dao.storeContractDetails(receipt.getContractAddress(), contractDOOptional.get().getCompanyWalletAddr())).get() : false;
 
     }
 }

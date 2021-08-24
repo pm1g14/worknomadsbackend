@@ -2,15 +2,24 @@ package com.worknomads.worknomads.dtos;
 
 public class EmployeeDTO {
     private Integer id;
-    private String name;
-    private String surname;
-    private String address;
-    private String email;
-    private String walletAddress;
-    private String countryOfResidence;
-    private String phoneNum;
+    private final String name;
+    private final String surname;
+    private final String address;
+    private final String email;
+    private final String walletAddress;
+    private final String countryOfResidence;
+    private final String phoneNum;
 
-    public EmployeeDTO() {}
+    public EmployeeDTO(Integer id, String name, String surname, String address, String countryOfResidence, String email, String phoneNum, String walletAddress) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.address = address;
+        this.countryOfResidence = countryOfResidence;
+        this.email = email;
+        this.phoneNum = phoneNum;
+        this.walletAddress = walletAddress;
+    }
 
     public EmployeeDTO(String name, String surname, String address, String countryOfResidence, String email, String phoneNum, String walletAddress) {
         this.name = name;
@@ -54,35 +63,4 @@ public class EmployeeDTO {
         return walletAddress;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setWalletAddress(String walletAddress) {
-        this.walletAddress = walletAddress;
-    }
-
-    public void setCountryOfResidence(String countryOfResidence) {
-        this.countryOfResidence = countryOfResidence;
-    }
-
-    public void setPhoneNum(String phoneNum) {
-        this.phoneNum = phoneNum;
-    }
 }

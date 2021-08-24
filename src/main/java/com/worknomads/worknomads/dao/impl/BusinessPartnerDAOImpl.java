@@ -1,34 +1,34 @@
-package com.worknomads.worknomads.services.businesspartner;
+package com.worknomads.worknomads.dao.impl;
 
+import com.worknomads.worknomads.dao.BusinessPartnerDAO;
 import com.worknomads.worknomads.dao.BusinessPartnerRepository;
 import com.worknomads.worknomads.dtos.BusinessPartnerDTO;
 import com.worknomads.worknomads.models.BusinessPartner;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-public class BusinessPartnerService implements IBusinessPartnerService{
+@Component
+public class BusinessPartnerDAOImpl implements BusinessPartnerDAO {
 
     @Autowired
     private BusinessPartnerRepository businessPartnerRepository;
 
+
     @Override
     public BusinessPartnerDTO getBusinessPartnerByWalletAddress(String walletAddress) {
-
         var businessPartner = this.businessPartnerRepository.findById(walletAddress);
 
-        if (!businessPartner.isPresent()) return null;
+        return businessPartner.map(businessPartner1 -> new BusinessPartnerDTO(
+                businessPartner1.getName(),
+                businessPartner1.getAddress(),
+                businessPartner1.getEmail(),
+                businessPartner1.getPhone(),
+                businessPartner1.getWalletAddress(),
+                null)).orElse(null);
 
-        return new BusinessPartnerDTO(
-                businessPartner.get().getName(),
-                businessPartner.get().getAddress(),
-                businessPartner.get().getEmail(),
-                businessPartner.get().getPhone(),
-                businessPartner.get().getWalletAddress(),
-                null);
     }
 
     @Override
@@ -47,20 +47,7 @@ public class BusinessPartnerService implements IBusinessPartnerService{
             partner.setWalletAddress(nextPartner.getWalletAddress());
             businessPartnersDTO.add(partner);
         }
-
         return businessPartnersDTO;
-    }
-
-    @Override
-    public void createBusinessPartner(BusinessPartnerDTO bpDto) {
-
-        this.businessPartnerRepository.save(new
-                BusinessPartner(
-                bpDto.getName(),
-                bpDto.getAddress(),
-                bpDto.getEmail(),
-                bpDto.getPhone(),
-                bpDto.getWalletAddress()));
     }
 
     @Override
@@ -69,14 +56,28 @@ public class BusinessPartnerService implements IBusinessPartnerService{
     }
 
     @Override
-    public void updateBusinessPartner(BusinessPartnerDTO bpDto) {
-
-        this.businessPartnerRepository.save(new
+    public void createBusinessPartner(BusinessPartnerDTO businessPartner) {
+        if (businessPartner != null) {
+            this.businessPartnerRepository.save(new
                 BusinessPartner(
-                bpDto.getName(),
-                bpDto.getAddress(),
-                bpDto.getEmail(),
-                bpDto.getPhone(),
-                bpDto.getWalletAddress()));
+                businessPartner.getName(),
+                businessPartner.getAddress(),
+                businessPartner.getEmail(),
+                businessPartner.getPhone(),
+                businessPartner.getWalletAddress()));
+        }
+    }
+
+    @Override
+    public void updateBusinessPartner(BusinessPartnerDTO businessPartner) {
+        if (businessPartner != null) {
+            this.businessPartnerRepository.save(new
+                BusinessPartner(
+                businessPartner.getName(),
+                businessPartner.getAddress(),
+                businessPartner.getEmail(),
+                businessPartner.getPhone(),
+                businessPartner.getWalletAddress()));
+        }
     }
 }

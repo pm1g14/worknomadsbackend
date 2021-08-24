@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface Contracts2Repository extends CrudRepository<SmartContract, Integer> {
-    @Query("SELECT c.address FROM SmartContract c WHERE c.business_partner_wallet_address  = :business_partner_walletAddress")
-    List<String> findByBusinessPartnerWalletAddress(@Param("business_partner_walletAddress") String business_partner_walletAddress);
+public interface Contracts2Repository extends CrudRepository<SmartContract, String> {
+    @Query("SELECT c.address FROM SmartContract c WHERE c.business_partner_wallet_address  = :business_partner_wallet_address")
+    List<String> findByBusinessPartnerWalletAddress(@Param("business_partner_wallet_address") String business_partner_wallet_address);
 }
