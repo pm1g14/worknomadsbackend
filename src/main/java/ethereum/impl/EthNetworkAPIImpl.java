@@ -5,12 +5,14 @@ import com.worknomads.worknomads.adapters.impl.RetrieveContractsDAOAdapter;
 import com.worknomads.worknomads.dos.ContractDO;
 import com.worknomads.worknomads.dos.RetrievedContractDO;
 import ethereum.EthNetworkAPI;
+import ethereum.utils.ContractTransactionUtils;
 import ethereum.wrappers.EmploymentContract_sol_EmploymentContract;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.web3j.crypto.CipherException;
+import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
@@ -46,12 +48,13 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
         //Optional<File> walletFileLocation = Optional.of(new File(env.getProperty("employee.wallet.location")));
         //   createWallet(password, walletFileLocation.orElseThrow(FileNotFoundException::new));
 
-        Web3j web3 = getConnection();
-        TransactionManager transactionManager = new ClientTransactionManager(web3, contractContents.getCompanyWalletAddr());
+        String sourceFile = "C:\\Users\\panosmav\\AppData\\Roaming\\Ethereum\\testnet\\keystore\\UTC--2021-08-16T19-46-41.527495000Z--816f37f9d8088b7ec15808b5c0811b217849614d.json";
+        String password = "paokaraoleG41";
+        Optional<Credentials> credentials = ContractTransactionUtils.loadCredentials(password, sourceFile);
 
         return EmploymentContract_sol_EmploymentContract.deploy(
-                web3,
-                transactionManager,
+                getConnection(),
+                credentials.get(),
                 new DefaultGasProvider(),
                 cid,
                 contractContents.getEmployeeName(),

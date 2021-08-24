@@ -1,4 +1,5 @@
 0x0ffc6b8d803fe1f632c04188e8bdcf59c3a003a0 saved contract.
+0x0426c15665d622f2a62586a8667474c9e7a2313b saved contract.
  saved contract.
 Test data:
 {
@@ -51,3 +52,5 @@ docker run -p 8090:80 panosm/worknomadsbackend
 
 https://rinkeby.etherscan.io/address/0x816f37f9d8088b7ec15808b5c0811b217849614d -> etherscan rinkeby
 C:\Users\panosmav\AppData\Roaming\Ethereum\testnet\keystore
+
+17f29773-522e-48b7-9887-d83beccf83b7 -> dockerhub

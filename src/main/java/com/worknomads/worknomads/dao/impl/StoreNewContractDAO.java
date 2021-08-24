@@ -18,7 +18,7 @@ public class StoreNewContractDAO implements StoreContractDAO {
     public boolean storeContractDetails(String companyWalletAddress, String contractAddress) {
 
         if (!contractAddress.isEmpty() && !companyWalletAddress.isEmpty()) {
-            var smartContract = new SmartContract(contractAddress, ContractStatus.ACTIVE.toString(), companyWalletAddress);
+            var smartContract = new SmartContract(companyWalletAddress, ContractStatus.ACTIVE.toString(), contractAddress);
             contractsRepository.save(smartContract);
             return true;
         }
