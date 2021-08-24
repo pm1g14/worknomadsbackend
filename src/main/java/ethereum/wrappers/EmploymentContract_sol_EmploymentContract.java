@@ -201,7 +201,9 @@ public class EmploymentContract_sol_EmploymentContract extends Contract {
         String source = "0x816f37f9d8088b7ec15808b5c0811b217849614d";
         BigInteger nonce = ContractTransactionUtils.getNonceForAccount(web3j, source);
         //TODO remove these and add separate transaction wallets for each company
-        Optional<Credentials> credentials = ContractTransactionUtils.loadCredentials();
+        String sourceFile = "C:\\Users\\panosmav\\AppData\\Roaming\\Ethereum\\testnet\\keystore\\UTC--2021-08-16T19-46-41.527495000Z--816f37f9d8088b7ec15808b5c0811b217849614d.json";
+        String password = "paokaraoleG41";
+        Optional<Credentials> credentials = ContractTransactionUtils.loadCredentials(password, sourceFile);
 
         String signedMessage = ContractTransactionUtils.signMessage(nonce, encodedFunction, contractAddress, RINKEBY_CHAIN_ID, credentials.get(), FUNC_TRANSFERFUNDS);
         return web3j.ethSendRawTransaction(signedMessage).sendAsync();

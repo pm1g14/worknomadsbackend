@@ -18,9 +18,8 @@ public class ContractTransactionUtils {
 
     private static Logger logger = LoggerFactory.getLogger(EthNetworkAPI.class);
 
-    public static Optional<Credentials> loadCredentials() {
-        String sourceFile = "C:\\Users\\panosmav\\AppData\\Roaming\\Ethereum\\testnet\\keystore\\UTC--2021-08-16T19-46-41.527495000Z--816f37f9d8088b7ec15808b5c0811b217849614d.json";
-        String password = "paokaraoleG41";
+    public static Optional<Credentials> loadCredentials(String password, String sourceFile) {
+
         Credentials credentials = null;
         try {
             logger.debug("Invoking credentials...");

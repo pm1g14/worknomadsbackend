@@ -1,18 +1,18 @@
-package com.worknomads.worknomads.services.businesspartner;
+package com.worknomads.worknomads.dao;
 
 import com.worknomads.worknomads.dtos.BusinessPartnerDTO;
 
 import java.util.List;
 
-public interface IBusinessPartnerService {
+public interface BusinessPartnerDAO {
 
     BusinessPartnerDTO getBusinessPartnerByWalletAddress(String walletAddress);
 
     List<BusinessPartnerDTO> getAll();
 
-    void createBusinessPartner(BusinessPartnerDTO businessDetailsDTO);
-
     void deleteBusinessPartner(String walletAddress);
 
-    void updateBusinessPartner(BusinessPartnerDTO businessPartnerDTO);
+    void createBusinessPartner(BusinessPartnerDTO businessPartner);
+
+    void updateBusinessPartner(BusinessPartnerDTO businessPartner);
 }

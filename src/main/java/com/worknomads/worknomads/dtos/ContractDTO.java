@@ -10,11 +10,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public final class ContractDTO {
 
     private final String employeeName;
-    private final String employeeSur;
+    private final String employeeSurname;
     private final String address;
     private final String countryOfResidence;
     private final String email;
-    private final String phoneNum;
+    private final String phoneNumber;
     private final String companyWalletAddress;
     private final String employeeWalletAddress;
     private final ContractDetailsDTO contractDetails;
@@ -23,20 +23,20 @@ public final class ContractDTO {
     @JsonCreator
     public ContractDTO(
             @JsonProperty("employeeName") String employeeName,
-            @JsonProperty("employeeSur") String employeeSur,
+            @JsonProperty("employeeSurname") String employeeSur,
             @JsonProperty("address") String address,
             @JsonProperty("countryOfResidence") String country,
             @JsonProperty("email") String email,
-            @JsonProperty("phoneNum") String phoneNum,
+            @JsonProperty("phoneNumber") String phoneNum,
             @JsonProperty("companyWalletAddress") String senderWalletAddr,
             @JsonProperty("contractDetails") ContractDetailsDTO contractDetails,
             @JsonProperty("employeeWalletAddress") String employeeWalletAddress) {
         this.employeeName = employeeName;
         this.address = address;
-        this.employeeSur = employeeSur;
+        this.employeeSurname = employeeSur;
         this.countryOfResidence = country;
         this.email = email;
-        this.phoneNum = phoneNum;
+        this.phoneNumber = phoneNum;
         this.contractDetails = contractDetails;
         this.companyWalletAddress = senderWalletAddr;
         this.employeeWalletAddress = employeeWalletAddress;
@@ -46,8 +46,8 @@ public final class ContractDTO {
         return employeeName;
     }
 
-    public String getEmployeeSur() {
-        return employeeSur;
+    public String getEmployeeSurname() {
+        return employeeSurname;
     }
 
     public String getAddress() {
@@ -56,10 +56,6 @@ public final class ContractDTO {
 
     public String getEmail() {
         return email;
-    }
-
-    public String getPhoneNum() {
-        return phoneNum;
     }
 
     public ContractDetailsDTO getContractDetails() {
@@ -76,5 +72,9 @@ public final class ContractDTO {
 
     public String getEmployeeWalletAddress() {
         return employeeWalletAddress;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 }

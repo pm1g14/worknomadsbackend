@@ -52,13 +52,13 @@ public class EmployeeController {
         if (employee == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         var response = new EmployeeResponse(employee.getId(),
-                employee.getName(),
-                employee.getSurname(),
-                employee.getAddress(),
-                employee.getEmail(),
-                employee.getWalletAddress(),
-                employee.getCountryOfResidence(),
-                employee.getPhoneNum());
+            employee.getName(),
+            employee.getSurname(),
+            employee.getAddress(),
+            employee.getEmail(),
+            employee.getWalletAddress(),
+            employee.getCountryOfResidence(),
+            employee.getPhoneNum());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -67,14 +67,14 @@ public class EmployeeController {
     @RequestMapping(value = "/employee", method = RequestMethod.PUT)
     public ResponseEntity<Void> updateEmployee(@RequestBody final RegisterEmployeeRequest request){
         this.employeeService.updateEmployee(
-                new EmployeeDTO(
-                        request.getName(),
-                        request.getSurname(),
-                        request.getAddress(),
-                        request.getCountryOfResidence(),
-                        request.getEmail(),
-                        request.getPhoneNum(),
-                        request.getWalletAddress()));
+            new EmployeeDTO(
+                request.getName(),
+                request.getSurname(),
+                request.getAddress(),
+                request.getCountryOfResidence(),
+                request.getEmail(),
+                request.getPhoneNum(),
+                request.getWalletAddress()));
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

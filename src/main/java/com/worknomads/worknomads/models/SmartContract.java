@@ -7,69 +7,50 @@ import javax.persistence.*;
 public class SmartContract {
 
     @Id
+    private String address;
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
-    private String contract_expiry;
-    private String gross_salary;
-    private String remote_location;
-    private String payment_installments;
-    private String payment_term;
-    private String balance_unit;
-    private String address;
-    private String employee_wallet_address;
+    private String status;
     private String business_partner_wallet_address;
 
-    protected SmartContract() {}
+    public SmartContract() {}
 
-    public SmartContract(String contractExpiry, String grossSalary, String remoteLocation, String paymentInstallments, String paymentTerm, String balanceUnit, String address, String employee_wallet_address, String business_partner_wallet_address) {
-        this.contract_expiry = contractExpiry;
-        this.gross_salary = grossSalary;
-        this.remote_location = remoteLocation;
-        this.payment_installments = paymentInstallments;
-        this.payment_term = paymentTerm;
-        this.balance_unit = balanceUnit;
+    public SmartContract(String address, String status, String business_partner_wallet_address) {
         this.address = address;
-        this.employee_wallet_address = employee_wallet_address;
+        this.status = status;
         this.business_partner_wallet_address = business_partner_wallet_address;
     }
 
-    public Integer getId() {
-        return id;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public String getContractExpiry() {
-        return contract_expiry;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getGrossSalary() {
-        return gross_salary;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getRemoteLocation() {
-        return remote_location;
+    public void setBusiness_partner_wallet_address(String business_partner_wallet_address) {
+        this.business_partner_wallet_address = business_partner_wallet_address;
     }
 
-    public String getPaymentInstallments() {
-        return payment_installments;
-    }
-
-    public String getPaymentTerm() {
-        return payment_term;
-    }
-
-    public String getBalanceUnit() {
-        return balance_unit;
+    public String getStatus() {
+        return status;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public String getEmployee_walletAddress() {
-        return employee_wallet_address;
+
+    public String getBusiness_partner_wallet_address() {
+        return business_partner_wallet_address;
     }
 
-    public String getBusiness_partner_walletAddress() {
-        return business_partner_wallet_address;
+    public Integer getId() {
+        return id;
     }
 }

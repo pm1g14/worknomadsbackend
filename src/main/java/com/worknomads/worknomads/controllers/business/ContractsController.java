@@ -18,7 +18,9 @@ public class ContractsController {
 
 
     @Autowired
-    private InputValidator<ContractDTO> validator;
+    private InputValidator<ContractDTO> contractValidator;
+    @Autowired
+    private InputValidator<PayContractDTO> payValidator;
     @Autowired
     private CreateContractService service;
     @Autowired
@@ -32,7 +34,7 @@ public class ContractsController {
        @PathVariable("companyId") String cid,
        @RequestBody ContractDTO contract) throws ExecutionException, InterruptedException {
 
-            if (validator.validate(contract)) {
+            if (contractValidator.validate(contract)) {
                 return service.createContract(contract, cid);
             }
             return false;
@@ -62,7 +64,9 @@ public class ContractsController {
     @RequestMapping(value = "app/v1/contract/pay", method = RequestMethod.POST)
     @ResponseBody
     public boolean payContract(@RequestBody PayContractDTO payContractDetails) {
-        return payService.payContract(payContractDetails);
+        if (payValidator.validate(payContractDetails)) {
+            return payService.payContract(payContractDetails);
+        } else return false;
     }
 
 

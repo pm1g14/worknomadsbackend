@@ -28,9 +28,6 @@ public class RetrieveContractsServiceImpl implements RetrieveContractsService {
     private RetrieveContractsDAO dao;
 
     @Autowired
-    private Contracts2Repository contractsRepository;
-
-    @Autowired
     private RetrieveContractsIOAdapter ioAdapter;
 
     private EthNetworkAPI ethNetworkService = new EthNetworkAPIImpl();
@@ -39,9 +36,7 @@ public class RetrieveContractsServiceImpl implements RetrieveContractsService {
 
     @Override
     public ContractDTOs retrieveContracts(String walletAddress) {
-        //List<String> addresses = dao.retrieveContractAddressesForWallet(walletAddress);
-
-        var addresses = this.contractsRepository.findByBusinessPartnerWalletAddress(walletAddress);
+        List<String> addresses = dao.retrieveContractAddressesForWallet(walletAddress);
 
         List<RetrievedContractDO> contracts = new ArrayList<>();
         for (String address: addresses) {

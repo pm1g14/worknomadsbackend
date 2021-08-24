@@ -16,12 +16,12 @@ import java.util.List;
 public class BusinessPartnerController {
 
     @Autowired
-    private IBusinessPartnerService businessPartnerInterface;
+    private IBusinessPartnerService businessPartnerService;
 
     @RequestMapping(value = "/business-partner/create", method = RequestMethod.POST)
     public ResponseEntity<Void> create(@RequestBody final RegisterCompanyRequest request){
 
-        this.businessPartnerInterface.createBusinessPartner(new BusinessPartnerDTO(
+        businessPartnerService.createBusinessPartner(new BusinessPartnerDTO(
                 request.getName(),
                 request.getAddress(),
                 request.getEmail(),
@@ -34,7 +34,7 @@ public class BusinessPartnerController {
     @CrossOrigin(origins = "https://localhost:44333")
     @RequestMapping(value = "/business-partner/index", method = RequestMethod.GET)
     public ResponseEntity<List<BusinessPartnerDTO>> getBusinessPartners(){
-        var result = this.businessPartnerInterface
+        var result = businessPartnerService
                 .getAll();
 
         if (result == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -44,7 +44,7 @@ public class BusinessPartnerController {
 
     @RequestMapping(value = "/business-partner/{walletAddress}", method = RequestMethod.GET)
     public ResponseEntity<BusinessPartnerDTO> getBusiness(@PathVariable String walletAddress){
-        var result = this.businessPartnerInterface
+        var result = businessPartnerService
                 .getBusinessPartnerByWalletAddress(walletAddress);
 
         if (result == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -54,7 +54,7 @@ public class BusinessPartnerController {
 
     @RequestMapping(value = "/business-partner", method = RequestMethod.PUT)
     public ResponseEntity<Void> updateBusiness(@RequestBody final RegisterCompanyRequest rc){
-        this.businessPartnerInterface.updateBusinessPartner(
+        businessPartnerService.updateBusinessPartner(
                 new BusinessPartnerDTO(rc.getName(),
                         rc.getAddress(),
                         rc.getEmail(),
@@ -67,7 +67,7 @@ public class BusinessPartnerController {
 
     @RequestMapping(value = "/business-partner/{walletAddress}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteBusiness(@PathVariable String walletAddress){
-        this.businessPartnerInterface.deleteBusinessPartner(walletAddress);
+        businessPartnerService.deleteBusinessPartner(walletAddress);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -22,7 +22,7 @@ public class ContractDetailsValidator implements InputValidator<ContractDTO> {
 
         boolean validExpiry = false;
         boolean validPaymentTerm = false;
-        if (Optional.of(toBeValidated.getContractDetails()).isPresent()) {
+        if (Optional.ofNullable(toBeValidated.getContractDetails()).isPresent()) {
             validExpiry = handleExpiryDate(toBeValidated.getContractDetails().getContractExpiry());
             validPaymentTerm = handlePaymentTermAndUnit(
                 toBeValidated.getContractDetails().getPaymentTerm(),
@@ -36,9 +36,11 @@ public class ContractDetailsValidator implements InputValidator<ContractDTO> {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone(ZoneId.of("UTC"));
 
         try {
-            ZonedDateTime.parse(dateString, formatter);
+            var zdt = ZonedDateTime.parse(dateString, formatter);
+            var now = ZonedDateTime.now();
+            if (zdt.isBefore(now)) return false;
             return true;
-        } catch (DateTimeParseException ex) {
+        } catch (Exception ex) {
             return false;
         }
     }
@@ -48,7 +50,7 @@ public class ContractDetailsValidator implements InputValidator<ContractDTO> {
             ContractPaymentTerm.valueOf(term);
             BalanceUnit.valueOf(unit);
             return true;
-        } catch (IllegalArgumentException ex) {
+        } catch (Exception ex) {
             return false;
         }
     }

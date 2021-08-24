@@ -24,11 +24,11 @@ public class CreateContractInputAdapter implements InputAdapter<ContractDTO, Con
     public Optional<ContractDO> mapDTOtoDO(ContractDTO dto) {
         return Optional.of(new ContractDO(
                 dto.getEmployeeName(),
-                dto.getEmployeeSur(),
+                dto.getEmployeeSurname(),
                 dto.getAddress(),
                 dto.getCountryOfResidence(),
                 dto.getEmail(),
-                dto.getPhoneNum(),
+                dto.getPhoneNumber(),
                 dto.getCompanyWalletAddress(),
                 dto.getEmployeeWalletAddress(),
                 getContractDetailsDOFromDTO(dto)
