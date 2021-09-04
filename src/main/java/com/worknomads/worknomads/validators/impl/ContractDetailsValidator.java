@@ -1,17 +1,13 @@
 package com.worknomads.worknomads.validators.impl;
 
 import com.worknomads.worknomads.dtos.ContractDTO;
-import com.worknomads.worknomads.dtos.ContractDetailsDTO;
 import com.worknomads.worknomads.enums.BalanceUnit;
 import com.worknomads.worknomads.enums.ContractPaymentTerm;
 import com.worknomads.worknomads.validators.InputValidator;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
 @Component

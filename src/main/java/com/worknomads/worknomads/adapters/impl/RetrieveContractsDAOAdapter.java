@@ -16,6 +16,7 @@ public class RetrieveContractsDAOAdapter implements InputAdapter<EmploymentContr
 
     @Override
     public Optional<RetrievedContractDO> mapDTOtoDO(EmploymentContract_sol_EmploymentContract dto) {
+        String contractAddress = dto.getContractAddress();
         CompletableFuture<String> paymentTerm = dto.paymentTerm().sendAsync();
         CompletableFuture<String> name = dto.employeeName().sendAsync();
         CompletableFuture<String> surname = dto.employeeSur().sendAsync();
@@ -31,7 +32,7 @@ public class RetrieveContractsDAOAdapter implements InputAdapter<EmploymentContr
                         email.thenCompose( (String em) ->
                             salary.thenCompose( (BigInteger sal) ->
                                 balance.thenCompose( (BigInteger bal) ->
-                                    isActive.thenApply((Boolean active) -> validateOrEmptyOptional(n, sur, em, term, sal, bal, active)
+                                    isActive.thenApply((Boolean active) -> validateOrEmptyOptional(n, sur, em, term, sal, bal, active, contractAddress)
                                     )
                                 )
                             )
@@ -50,16 +51,17 @@ public class RetrieveContractsDAOAdapter implements InputAdapter<EmploymentContr
         String term,
         BigInteger salary,
         BigInteger balance,
-        Boolean isActive) {
+        Boolean isActive,
+        String contractAddress) {
 
-            if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || term.isEmpty() || salary.equals(BigInteger.ZERO)) {
+            if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || term.isEmpty() || contractAddress.isEmpty() || salary.equals(BigInteger.ZERO)) {
                 return Optional.empty();
             }
 
             try {
                 ContractPaymentTerm paymentTerm = ContractPaymentTerm.valueOf(term);
                 return Optional.of(
-                   new RetrievedContractDO(name, surname, email, paymentTerm, salary.doubleValue(), balance.doubleValue(), isActive)
+                   new RetrievedContractDO(contractAddress, "son", name, surname, email, paymentTerm, salary.doubleValue(), balance.doubleValue(), isActive)
                 );
             } catch (IllegalArgumentException ex) {
                 return Optional.empty();

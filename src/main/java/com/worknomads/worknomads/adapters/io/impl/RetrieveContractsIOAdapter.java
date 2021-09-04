@@ -21,13 +21,15 @@ public class RetrieveContractsIOAdapter implements InputAdapter<ContractDTOs, Co
         List<RetrievedContractDTO> contractDTOs = new ArrayList<>();
         for (RetrievedContractDO contractDO: Do.getContractList()) {
             RetrievedContractDTO contractDTO = new RetrievedContractDTO(
-                    contractDO.getEmployeeName(),
-                    contractDO.getEmployeeSur(),
-                    contractDO.getEmployeeEmail(),
-                    contractDO.getTerm().term,
-                    contractDO.getNextPaymentAmount(),
-                    contractDO.getRemainingBalance(),
-                    contractDO.isActive()
+                contractDO.getAddress(),
+                contractDO.getBusinessPartner(),
+                contractDO.getEmployeeName(),
+                contractDO.getEmployeeSur(),
+                contractDO.getEmployeeEmail(),
+                contractDO.getTerm().term,
+                contractDO.getNextPaymentAmount(),
+                contractDO.getRemainingBalance(),
+                contractDO.isActive()
             );
             contractDTOs.add(contractDTO);
         }
