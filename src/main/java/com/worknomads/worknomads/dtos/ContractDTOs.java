@@ -12,14 +12,14 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class ContractDTOs {
 
-    private final List<RetrievedContractDTO> contractList;
+    private final List<RetrievedContractDTO> contracts;
 
     @JsonCreator
-    public ContractDTOs(@JsonProperty("contractList") List<RetrievedContractDTO> contractList) {
-        this.contractList = contractList;
+    public ContractDTOs(@JsonProperty("contracts") List<RetrievedContractDTO> contractList) {
+        this.contracts = contractList;
     }
 
-    public List<RetrievedContractDTO> getContractList() {
-        return Collections.unmodifiableList(contractList);
+    public List<RetrievedContractDTO> getContracts() {
+        return Collections.unmodifiableList(contracts);
     }
 }

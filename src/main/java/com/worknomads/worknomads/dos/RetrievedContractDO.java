@@ -4,6 +4,8 @@ import com.worknomads.worknomads.enums.ContractPaymentTerm;
 
 public class RetrievedContractDO {
 
+    private final String address;
+    private final String businessPartner;
     private final String employeeName;
     private final String employeeSur;
     private final String employeeEmail;
@@ -12,7 +14,9 @@ public class RetrievedContractDO {
     private final double remainingBalance;
     private final boolean isActive;
 
-    public RetrievedContractDO(String employeeName, String employeeSur, String employeeEmail, ContractPaymentTerm term, double nextPaymentAmount, double remainingBalance, boolean isActive) {
+    public RetrievedContractDO(String contractAddress, String businessPartner, String employeeName, String employeeSur, String employeeEmail, ContractPaymentTerm term, double nextPaymentAmount, double remainingBalance, boolean isActive) {
+        this.address = contractAddress;
+        this.businessPartner = businessPartner;
         this.employeeName = employeeName;
         this.employeeSur = employeeSur;
         this.employeeEmail = employeeEmail;
@@ -48,5 +52,14 @@ public class RetrievedContractDO {
 
     public double getNextPaymentAmount() {
         return nextPaymentAmount;
+    }
+
+
+    public String getBusinessPartner() {
+        return businessPartner;
+    }
+
+    public String getAddress() {
+        return address;
     }
 }

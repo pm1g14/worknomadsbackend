@@ -2,17 +2,21 @@ package com.worknomads.worknomads.dtos;
 
 public class RetrievedContractDTO {
 
+    private final String address;
+    private final String businessPartner;
     private final String employeeName;
-    private final String employeeSur;
+    private final String employeeSurname;
     private final String employeeEmail;
     private final String term;
     private final double nextPaymentAmount;
     private final double remainingBalance;
     private final boolean isActive;
 
-    public RetrievedContractDTO(String employeeName, String employeeSur, String employeeEmail, String term, double nextPaymentAmount, double remainingBalance, boolean isActive) {
+    public RetrievedContractDTO(String contractAddress, String businessPartner, String employeeName, String employeeSur, String employeeEmail, String term, double nextPaymentAmount, double remainingBalance, boolean isActive) {
+        this.address = contractAddress;
+        this.businessPartner = businessPartner;
         this.employeeName = employeeName;
-        this.employeeSur = employeeSur;
+        this.employeeSurname = employeeSur;
         this.employeeEmail = employeeEmail;
         this.term = term;
         this.nextPaymentAmount = nextPaymentAmount;
@@ -22,10 +26,6 @@ public class RetrievedContractDTO {
 
     public String getEmployeeName() {
         return employeeName;
-    }
-
-    public String getEmployeeSur() {
-        return employeeSur;
     }
 
     public String getEmployeeEmail() {
@@ -46,5 +46,17 @@ public class RetrievedContractDTO {
 
     public boolean isActive() {
         return isActive;
+    }
+
+    public String getBusinessPartner() {
+        return businessPartner;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getEmployeeSurname() {
+        return employeeSurname;
     }
 }

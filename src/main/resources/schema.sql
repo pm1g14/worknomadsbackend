@@ -34,7 +34,8 @@ PRIMARY KEY (address)
 );
 
 INSERT INTO business_partner (name, address, email, phone, wallet_address) VALUES
-('Sonovate', 'Cardiff Castle street', 'sono@sono.co.uk', '+44023456437', '0x45316062B2347659F19A01765f0e7af05ED34a3d');
+('Sonovate', 'Cardiff Castle street', 'sono@sono.co.uk', '+44023456437', '0x45316062B2347659F19A01765f0e7af05ED34a3d'),
+('SomeInc', 'Cardiff Castle street', 'sono@sono.co.uk', '+44023456437', '0xca0fc0957f148497f9e2ce6ed104a550c04d9374');
 
 INSERT INTO employee (name, surname, email, address, country_of_residence, phone_num, wallet_address) VALUES
 ('Aris', 'Fanaras', 'aris@fan.co.uk', 'Piercefield', 'Greece', '+44023456437', '0xCF6999A79411D4Ed73aA0cCa43fE2982cFA68e65'),

@@ -29,20 +29,20 @@ public class ContractsController {
     @Autowired
     private PayContractService payService;
 
-
+    // @CrossOrigin(origins = "https://work-nomads.netlify.app")
     @RequestMapping(value = "/app/v1/contracts/create", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public boolean createContract(
        @RequestBody ContractDTO contract) throws ExecutionException, InterruptedException {
 
-            if (contractValidator.validate(contract)) {
-                try {
-                    return service.createContract(contract);
-                } catch (TransactionException e) {
-                    return false;
-                }
+        if (contractValidator.validate(contract)) {
+            try {
+                return service.createContract(contract);
+            } catch (TransactionException e) {
+                return false;
             }
-            return false;
+        }
+        return false;
     }
 
 

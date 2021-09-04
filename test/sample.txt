@@ -1,10 +1,11 @@
 0x0ffc6b8d803fe1f632c04188e8bdcf59c3a003a0 saved contract.
 0x0426c15665d622f2a62586a8667474c9e7a2313b saved contract.
+0x84ab8d12ca11ef21475962478b2a974fec040b2e saved contract.
  saved contract.
 Test data:
 {
 	"employeeName": "panos",
-  	"employeeSur": "mavr",
+  	"employeeSurname": "mavr",
   	"address": "some",
   	"countryOfResidence": "GR",
   	"email": "panamavr@hotmail.com",
@@ -12,12 +13,12 @@ Test data:
   	"companyWalletAddress": "0xca0fc0957f148497f9e2ce6ed104a550c04d9374",
   	"employeeWalletAddress": "0xCF6999A79411D4Ed73aA0cCa43fE2982cFA68e65",
   	"contractDetails": {
-    	"contractExpiry": "2016-06-23T09:07:21Z",
+    	"contractExpiry": "2022-06-23T09:07:21Z",
       	"grossSalary": 2000.0,
       	"remoteLocation": "GR",
       	"paymentInstallments": 10,
       	"paymentTerm": "MONTHLY",
-      	"balanceUnit": "USD_TETHER"
+      	"balanceUnit": "USDT"
     }
 }
 
