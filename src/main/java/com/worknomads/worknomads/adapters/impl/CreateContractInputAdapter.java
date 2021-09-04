@@ -9,6 +9,7 @@ import com.worknomads.worknomads.enums.BalanceUnit;
 import com.worknomads.worknomads.enums.ContractPaymentTerm;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,7 +19,7 @@ import java.util.Optional;
 @Component
 public class CreateContractInputAdapter implements InputAdapter<ContractDTO, ContractDO> {
 
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone(ZoneId.of("UTC"));
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Override
     public Optional<ContractDO> mapDTOtoDO(ContractDTO dto) {
@@ -44,7 +45,7 @@ public class CreateContractInputAdapter implements InputAdapter<ContractDTO, Con
     private ContractDetailsDO getContractDetailsDOFromDTO(ContractDTO dto) {
         ContractDetailsDTO contractDetailsDTO = dto.getContractDetails();
         ContractDetailsDO contractDetailsDO = new ContractDetailsDO(
-                ZonedDateTime.parse(contractDetailsDTO.getContractExpiry(), formatter),
+                LocalDate.parse(contractDetailsDTO.getContractExpiry(), formatter),
                 new Locale(contractDetailsDTO.getRemoteLocation()),
                 contractDetailsDTO.getGrossSalary(),
                 contractDetailsDTO.getPaymentInstallments(),

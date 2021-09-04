@@ -1,9 +1,11 @@
 package com.worknomads.worknomads.services.contracts.impl;
 
 import com.worknomads.worknomads.dtos.PayContractDTO;
+import com.worknomads.worknomads.enums.BalanceUnit;
 import com.worknomads.worknomads.services.PayContractService;
 import ethereum.EthNetworkAPI;
 import ethereum.impl.EthNetworkAPIImpl;
+import ethereum.utils.AmountConversionUtils;
 import io.micrometer.core.instrument.util.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +19,20 @@ public class PayContractServiceImpl implements PayContractService {
 
     @Override
     public boolean payContract(PayContractDTO transactionDetails) {
+        if (transactionDetails == null) return false;
         BigInteger amount = BigDecimal.valueOf(transactionDetails.getAmount()).toBigInteger();
+        BalanceUnit unit = BalanceUnit.valueOf(transactionDetails.getPaymentUnit());
+        BigInteger amountToWei;
+
+        if (BalanceUnit.ETHEREUM.equals(unit))
+            amountToWei = AmountConversionUtils.convertEthToWei.apply(amount);
+        else
+            amountToWei = amount;
+
         try {
             String receipt = ethNetworkService.payContract(
                 transactionDetails.getContractAddress(),
-                amount,
+                amountToWei,
                 transactionDetails.getRecipientWalletAddress()
             );
             return StringUtils.isNotEmpty(receipt);

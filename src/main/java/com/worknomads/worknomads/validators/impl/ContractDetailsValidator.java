@@ -7,6 +7,7 @@ import com.worknomads.worknomads.enums.ContractPaymentTerm;
 import com.worknomads.worknomads.validators.InputValidator;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,11 +34,11 @@ public class ContractDetailsValidator implements InputValidator<ContractDTO> {
     }
 
     private boolean handleExpiryDate(String dateString) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone(ZoneId.of("UTC"));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         try {
-            var zdt = ZonedDateTime.parse(dateString, formatter);
-            var now = ZonedDateTime.now();
+            var zdt = LocalDate.parse(dateString, formatter);
+            var now = LocalDate.now();
             if (zdt.isBefore(now)) return false;
             return true;
         } catch (Exception ex) {
