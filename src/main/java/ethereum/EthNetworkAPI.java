@@ -5,6 +5,7 @@ import com.worknomads.worknomads.dos.RetrievedContractDO;
 import org.springframework.beans.factory.annotation.Value;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.exceptions.TransactionException;
 import org.web3j.protocol.http.HttpService;
 
 import java.io.File;
@@ -22,12 +23,12 @@ public interface EthNetworkAPI {
         return Web3j.build(new HttpService(ethServiceUrl));
     }
 
-    CompletableFuture<TransactionReceipt> createAndPublishContract(ContractDO contractContents, String cid);
+    CompletableFuture<TransactionReceipt> createAndPublishContract(ContractDO contractContents) throws TransactionException;
 
-    RetrievedContractDO getContractDetailsFromAddress(String contractAddress);
+    RetrievedContractDO getContractDetailsFromAddress(String contractAddress) throws TransactionException;
 
     void createWallet(String password, File location);
 
-    String payContract(String contractAddress, BigInteger amount, String toWallet);
+    String payContract(String contractAddress, BigInteger amount, String toWallet) throws TransactionException;
 
 }

@@ -1,8 +1,6 @@
 package com.worknomads.worknomads.services.contracts.impl;
 
 import com.worknomads.worknomads.adapters.io.impl.RetrieveContractsIOAdapter;
-import com.worknomads.worknomads.dao.Contracts2Repository;
-import com.worknomads.worknomads.dao.ContractsRepository;
 import com.worknomads.worknomads.dao.RetrieveContractsDAO;
 import com.worknomads.worknomads.dos.ContractDOs;
 import com.worknomads.worknomads.dos.RetrievedContractDO;
@@ -11,14 +9,17 @@ import com.worknomads.worknomads.dtos.RetrievedContractDTO;
 import com.worknomads.worknomads.services.contracts.RetrieveContractsService;
 import ethereum.EthNetworkAPI;
 import ethereum.impl.EthNetworkAPIImpl;
+import io.micrometer.core.instrument.util.StringUtils;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.web3j.protocol.exceptions.TransactionException;
+import org.web3j.tx.exceptions.ContractCallException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.slf4j.Logger;
 
 
 @Service
@@ -36,7 +37,12 @@ public class RetrieveContractsServiceImpl implements RetrieveContractsService {
 
     @Override
     public ContractDTOs retrieveContracts(String walletAddress) {
-        List<String> addresses = dao.retrieveContractAddressesForWallet(walletAddress);
+        List<String> addresses;
+
+        if (StringUtils.isEmpty(walletAddress))
+            addresses = dao.retrieveAllContractAddresses();
+        else
+            addresses = dao.retrieveContractAddressesForWallet(walletAddress);
 
         List<RetrievedContractDO> contracts = new ArrayList<>();
         for (String address: addresses) {
@@ -46,11 +52,19 @@ public class RetrieveContractsServiceImpl implements RetrieveContractsService {
                     contracts.add(retrievedContract);
                 } catch (IllegalArgumentException ex){
                     logger.debug("Contract at address "+ address + " has invalid values. Ignoring...");
+                } catch (ContractCallException ex2) {
+                    logger.debug("Contract call has failed with:"+ ex2.getMessage());
+                } catch (TransactionException ex3) {
+                    logger.debug("Transaction has failed for: "+ ex3.getMessage());
                 }
             }
         }
 
-        Optional<ContractDTOs> contractDTOsOpt = ioAdapter.mapDOtoDTO(new ContractDOs(contracts));
+        Optional<ContractDTOs> contractDTOsOpt;
+        if (contracts.isEmpty())
+            contractDTOsOpt = Optional.empty();
+        else
+            contractDTOsOpt = ioAdapter.mapDOtoDTO(new ContractDOs(contracts));
         return contractDTOsOpt.orElseThrow(IllegalArgumentException::new);
     }
 

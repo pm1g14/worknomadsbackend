@@ -17,6 +17,7 @@ public class RetrieveContractsIOAdapter implements InputAdapter<ContractDTOs, Co
 
     @Override
     public Optional<ContractDTOs> mapDOtoDTO(ContractDOs Do) {
+        if (Do == null) return Optional.empty();
         List<RetrievedContractDTO> contractDTOs = new ArrayList<>();
         for (RetrievedContractDO contractDO: Do.getContractList()) {
             RetrievedContractDTO contractDTO = new RetrievedContractDTO(

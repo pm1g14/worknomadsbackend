@@ -41,4 +41,5 @@ INSERT INTO employee (name, surname, email, address, country_of_residence, phone
 ('Panos', 'MAvr', 'panosmavr@mavr.co.uk', 'London', 'Canary', '+12313123', '0xCF6999A79411D4Ed73aA0cCa43fE2982cFA68e66');
 
 INSERT INTO smart_contract (address, status, business_partner_wallet_address) VALUES
-('0x9646fc6ee1b3bf193ca2bcd0d167e0aa2c6244b0', 'active', '0x45316062B2347659F19A01765f0e7af05ED34a3d');
+('0x7a605263af0d4490ef70e1b3245a8be81abb2ee8', 'active', '0xca0fc0957f148497f9e2ce6ed104a550c04d9374'),
+('0x84ab8d12ca11ef21475962478b2a974fec040b2e', 'active', '0xca0fc0957f148497f9e2ce6ed104a550c04d9374');

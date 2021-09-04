@@ -2,7 +2,6 @@ package com.worknomads.worknomads.dos;
 
 public class ContractDO {
 
-    private final String contractId;
     private final String employeeName;
     private final String employeeSur;
     private final String address;
@@ -23,7 +22,6 @@ public class ContractDO {
         this.contractDetails = contractDetails;
         this.companyWalletAddr = companyWalletAddr;
         this.employeeWalletAddr = employeeWalletAddr;
-        this.contractId = ""; //TODO implement a logic to provide a unique contractId for each contract
     }
 
     public String getEmployeeName() {
@@ -52,10 +50,6 @@ public class ContractDO {
 
     public String getCountryOfResidence() {
         return countryOfResidence;
-    }
-
-    public String getContractId() {
-        return contractId;
     }
 
     public String getCompanyWalletAddr() {

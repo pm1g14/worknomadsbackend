@@ -43,7 +43,7 @@ public class RetrieveContractsDAOAdapter implements InputAdapter<EmploymentContr
     }
 
 
-    private Optional<RetrievedContractDO> validateOrEmptyOptional(
+    Optional<RetrievedContractDO> validateOrEmptyOptional(
         String name,
         String surname,
         String email,
@@ -52,15 +52,8 @@ public class RetrieveContractsDAOAdapter implements InputAdapter<EmploymentContr
         BigInteger balance,
         Boolean isActive) {
 
-            if (name.isEmpty() ||
-                 surname.isEmpty() ||
-                 email.isEmpty() ||
-                 term.isEmpty() ||
-                 salary.equals(BigInteger.ZERO) ||
-                 balance.equals(BigInteger.ZERO)) {
-
-                    return Optional.empty();
-
+            if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || term.isEmpty() || salary.equals(BigInteger.ZERO)) {
+                return Optional.empty();
             }
 
             try {

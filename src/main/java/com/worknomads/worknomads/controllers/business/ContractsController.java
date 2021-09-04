@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.protocol.exceptions.TransactionException;
 
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
@@ -28,14 +29,18 @@ public class ContractsController {
     @Autowired
     private PayContractService payService;
 
-    @RequestMapping(value = "/app/v1/{companyId}/contracts/create", method = RequestMethod.POST)
+
+    @RequestMapping(value = "/app/v1/contracts/create", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public boolean createContract(
-       @PathVariable("companyId") String cid,
        @RequestBody ContractDTO contract) throws ExecutionException, InterruptedException {
 
             if (contractValidator.validate(contract)) {
-                return service.createContract(contract, cid);
+                try {
+                    return service.createContract(contract);
+                } catch (TransactionException e) {
+                    return false;
+                }
             }
             return false;
     }
@@ -44,7 +49,7 @@ public class ContractsController {
     @RequestMapping(value = "/app/v1/{walletAddress}/contracts/get", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public ContractDTOs getAllContracts(@PathVariable("walletAddress") String walletAddress) {
+    public ContractDTOs getPartnerContracts(@PathVariable("walletAddress") String walletAddress) {
         return retrieveContractsService.retrieveContracts(walletAddress);
 
     }
@@ -52,7 +57,7 @@ public class ContractsController {
 
     @RequestMapping(value = "/app/v1/{companyId}/employeeId/{employeeId}/contract/get", method = RequestMethod.GET)
     @ResponseBody
-    public RetrievedContractDTO getContractForId(
+    public RetrievedContractDTO getContractForEmployee(
        @PathVariable("companyId") String cid,
        @PathVariable("employeeId") String eid) {
 

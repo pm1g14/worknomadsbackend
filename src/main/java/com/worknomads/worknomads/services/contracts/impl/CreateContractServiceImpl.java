@@ -9,6 +9,7 @@ import ethereum.EthNetworkAPI;
 import ethereum.impl.EthNetworkAPIImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.web3j.protocol.exceptions.TransactionException;
 
 import java.util.concurrent.ExecutionException;
 
@@ -26,9 +27,9 @@ public class CreateContractServiceImpl implements CreateContractService {
 
 
     @Override
-    public boolean createContract(ContractDTO contract, String cid) throws ExecutionException, InterruptedException {
+    public boolean createContract(ContractDTO contract) throws ExecutionException, InterruptedException, TransactionException {
         var contractDOOptional = adapter.mapDTOtoDO(contract);
-        return contractDOOptional.isPresent() ? ethNetworkService.createAndPublishContract(contractDOOptional.get(), cid)
+        return contractDOOptional.isPresent() ? ethNetworkService.createAndPublishContract(contractDOOptional.get())
                 .thenApply(receipt -> dao.storeContractDetails(receipt.getContractAddress(), contractDOOptional.get().getCompanyWalletAddr())).get() : false;
 
     }

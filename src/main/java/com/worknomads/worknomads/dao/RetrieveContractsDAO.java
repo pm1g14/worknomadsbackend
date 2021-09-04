@@ -5,4 +5,5 @@ import java.util.List;
 public interface RetrieveContractsDAO {
 
     List<String> retrieveContractAddressesForWallet(String walletAddress);
+    List<String> retrieveAllContractAddresses();
 }
