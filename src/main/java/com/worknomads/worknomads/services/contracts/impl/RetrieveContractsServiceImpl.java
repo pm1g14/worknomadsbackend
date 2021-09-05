@@ -1,15 +1,18 @@
 package com.worknomads.worknomads.services.contracts.impl;
 
 import com.worknomads.worknomads.adapters.io.impl.RetrieveContractsIOAdapter;
+import com.worknomads.worknomads.dao.BusinessPartnerDAO;
 import com.worknomads.worknomads.dao.RetrieveContractsDAO;
 import com.worknomads.worknomads.dos.ContractDOs;
 import com.worknomads.worknomads.dos.RetrievedContractDO;
+import com.worknomads.worknomads.dtos.BusinessPartnerDTO;
 import com.worknomads.worknomads.dtos.ContractDTOs;
 import com.worknomads.worknomads.dtos.RetrievedContractDTO;
 import com.worknomads.worknomads.services.contracts.RetrieveContractsService;
 import ethereum.EthNetworkAPI;
 import ethereum.impl.EthNetworkAPIImpl;
 import io.micrometer.core.instrument.util.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,9 @@ public class RetrieveContractsServiceImpl implements RetrieveContractsService {
     private RetrieveContractsDAO dao;
 
     @Autowired
+    private BusinessPartnerDAO bpdao;
+
+    @Autowired
     private RetrieveContractsIOAdapter ioAdapter;
 
     private EthNetworkAPI ethNetworkService = new EthNetworkAPIImpl();
@@ -38,17 +44,40 @@ public class RetrieveContractsServiceImpl implements RetrieveContractsService {
     @Override
     public ContractDTOs retrieveContracts(String walletAddress) {
         List<String> addresses;
+        String businessPartnerName = "";
 
         if (StringUtils.isEmpty(walletAddress))
             addresses = dao.retrieveAllContractAddresses();
-        else
+        else {
             addresses = dao.retrieveContractAddressesForWallet(walletAddress);
+            Optional<BusinessPartnerDTO> businessPartnerOpt = Optional.ofNullable(bpdao.getBusinessPartnerByWalletAddress(walletAddress));
+            if (businessPartnerOpt.isPresent()) businessPartnerName = businessPartnerOpt.get().getName();
+        }
+        List<RetrievedContractDO> contracts = getRetrievedContractDOs(addresses, businessPartnerName);
 
+        Optional<ContractDTOs> contractDTOsOpt;
+        if (contracts.isEmpty())
+            contractDTOsOpt = Optional.empty();
+        else
+            contractDTOsOpt = ioAdapter.mapDOtoDTO(new ContractDOs(contracts));
+        return contractDTOsOpt.orElseThrow(IllegalArgumentException::new);
+    }
+
+
+    @Override
+    public RetrievedContractDTO retrieveContract(String cid, String eid) {
+        //TODO to be replaced by a DAO call to the db
+        return null;
+    }
+
+
+    @NotNull
+    private List<RetrievedContractDO> getRetrievedContractDOs(List<String> addresses, String businessPartnerName) {
         List<RetrievedContractDO> contracts = new ArrayList<>();
         for (String address: addresses) {
             if (address != null) {
                 try {
-                    RetrievedContractDO retrievedContract = ethNetworkService.getContractDetailsFromAddress(address);
+                    RetrievedContractDO retrievedContract = ethNetworkService.getContractDetailsFromAddress(address, businessPartnerName);
                     contracts.add(retrievedContract);
                 } catch (IllegalArgumentException ex){
                     logger.debug("Contract at address "+ address + " has invalid values. Ignoring...");
@@ -59,19 +88,7 @@ public class RetrieveContractsServiceImpl implements RetrieveContractsService {
                 }
             }
         }
-
-        Optional<ContractDTOs> contractDTOsOpt;
-        if (contracts.isEmpty())
-            contractDTOsOpt = Optional.empty();
-        else
-            contractDTOsOpt = ioAdapter.mapDOtoDTO(new ContractDOs(contracts));
-        return contractDTOsOpt.orElseThrow(IllegalArgumentException::new);
-    }
-
-    @Override
-    public RetrievedContractDTO retrieveContract(String cid, String eid) {
-        //TODO to be replaced by a DAO call to the db
-        return null;
+        return contracts;
     }
 
 }

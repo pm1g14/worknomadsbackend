@@ -37,7 +37,7 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
     private Environment env;
 
     @Autowired
-    private InputAdapter<EmploymentContract_sol_EmploymentContract, RetrievedContractDO> daoAdapter = new RetrieveContractsDAOAdapter();
+    private RetrieveContractsDAOAdapter daoAdapter = new RetrieveContractsDAOAdapter();
 
     private Logger logger = LoggerFactory.getLogger(EthNetworkAPI.class);
 
@@ -65,7 +65,7 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
     }
 
     @Override
-    public RetrievedContractDO getContractDetailsFromAddress(String contractAddress) throws TransactionException {
+    public RetrievedContractDO getContractDetailsFromAddress(String contractAddress, String businessPartnerName) throws TransactionException {
         Web3j web3 = getConnection();
 
         Optional<Credentials> credentials = getSignWalletCredentials();
@@ -75,7 +75,7 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
         handleNonRetrievableCredentials(credentials);
         EmploymentContract_sol_EmploymentContract contract = EmploymentContract_sol_EmploymentContract.load(
                 contractAddress, web3, credentials.get(), new DefaultGasProvider());
-        Optional<RetrievedContractDO> retrievedContract = daoAdapter.mapDTOtoDO(contract);
+        Optional<RetrievedContractDO> retrievedContract = daoAdapter.mapDTOtoDO(contract, businessPartnerName);
         return retrievedContract.orElseThrow(() -> new IllegalArgumentException("One or more fields of the retrieved contract are invalid."));
     }
 

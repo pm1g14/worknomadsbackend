@@ -31,7 +31,7 @@ public class RetrieveContractsDAOAdapterTest {
 
     @Test
     public void validateOrEmptyOptional_shouldReturnExpectedDOForValidInput() {
-        Optional<RetrievedContractDO> actual = daoAdapter.validateOrEmptyOptional("a", "b", "c", "Monthly", new BigInteger("100000"), new BigInteger("1000000"), true, "sdf");
+        Optional<RetrievedContractDO> actual = daoAdapter.validateOrEmptyOptional("a", "b", "c", "Monthly", new BigInteger("100000"), new BigInteger("1000000"), true, "sdf", "");
         var expected = new RetrievedContractDO(
                 "sdf", "", "a", "b", "c", ContractPaymentTerm.Monthly, 100000.0, 1000000.0, true);
         Assertions.assertEquals(actual.get().getEmployeeEmail(), expected.getEmployeeEmail());
@@ -45,43 +45,43 @@ public class RetrieveContractsDAOAdapterTest {
 
     @Test
     public void validateOrEmptyOptional_shouldReturnEmptyOptionalForMissingName() {
-        Optional<RetrievedContractDO> actual = daoAdapter.validateOrEmptyOptional("", "b", "c", "Monthly", new BigInteger("100000"), new BigInteger("1000000"), true,"sdf");
+        Optional<RetrievedContractDO> actual = daoAdapter.validateOrEmptyOptional("", "b", "c", "Monthly", new BigInteger("100000"), new BigInteger("1000000"), true,"sdf", "");
         Assertions.assertFalse(actual.isPresent());
     }
 
     @Test
     public void validateOrEmptyOptional_shouldReturnEmptyOptionalForMissingSurname() {
-        Optional<RetrievedContractDO> actual = daoAdapter.validateOrEmptyOptional("a", "", "c", "Monthly", new BigInteger("100000"), new BigInteger("1000000"), true, "sdf");
+        Optional<RetrievedContractDO> actual = daoAdapter.validateOrEmptyOptional("a", "", "c", "Monthly", new BigInteger("100000"), new BigInteger("1000000"), true, "sdf", "");
         Assertions.assertFalse(actual.isPresent());
     }
 
     @Test
     public void validateOrEmptyOptional_shouldReturnEmptyOptionalForMissingEmail() {
-        Optional<RetrievedContractDO> actual = daoAdapter.validateOrEmptyOptional("a", "b", "", "Monthly", new BigInteger("100000"), new BigInteger("1000000"), true, "sdf");
+        Optional<RetrievedContractDO> actual = daoAdapter.validateOrEmptyOptional("a", "b", "", "Monthly", new BigInteger("100000"), new BigInteger("1000000"), true, "sdf", "");
         Assertions.assertFalse(actual.isPresent());
     }
 
     @Test
     public void validateOrEmptyOptional_shouldReturnEmptyOptionalForMissingContractAddress() {
-        Optional<RetrievedContractDO> actual = daoAdapter.validateOrEmptyOptional("a", "b", "", "Monthly", new BigInteger("100000"), new BigInteger("1000000"), true, "");
+        Optional<RetrievedContractDO> actual = daoAdapter.validateOrEmptyOptional("a", "b", "", "Monthly", new BigInteger("100000"), new BigInteger("1000000"), true, "", "");
         Assertions.assertFalse(actual.isPresent());
     }
 
     @Test
     public void validateOrEmptyOptional_shouldReturnEmptyOptionalForMissingTerm() {
-        Optional<RetrievedContractDO> actual = daoAdapter.validateOrEmptyOptional("a", "b", "c", "", new BigInteger("100000"), new BigInteger("1000000"), true, "sdf");
+        Optional<RetrievedContractDO> actual = daoAdapter.validateOrEmptyOptional("a", "b", "c", "", new BigInteger("100000"), new BigInteger("1000000"), true, "sdf", "");
         Assertions.assertFalse(actual.isPresent());
     }
 
     @Test
     public void validateOrEmptyOptional_shouldReturnEmptyOptionalForMissingSalary() {
-        Optional<RetrievedContractDO> actual = daoAdapter.validateOrEmptyOptional("a", "b", "c", "Monthly", BigInteger.ZERO, new BigInteger("1000000"), true, "sdf");
+        Optional<RetrievedContractDO> actual = daoAdapter.validateOrEmptyOptional("a", "b", "c", "Monthly", BigInteger.ZERO, new BigInteger("1000000"), true, "sdf", "");
         Assertions.assertFalse(actual.isPresent());
     }
 
     @Test
     public void validateOrEmptyOptional_shouldReturnExpectedDOForZeroContractBalance() {
-        Optional<RetrievedContractDO> actual = daoAdapter.validateOrEmptyOptional("a", "b", "c", "Monthly", new BigInteger("100000"), BigInteger.ZERO, true, "sdf");
+        Optional<RetrievedContractDO> actual = daoAdapter.validateOrEmptyOptional("a", "b", "c", "Monthly", new BigInteger("100000"), BigInteger.ZERO, true, "sdf", "");
         var expected = new RetrievedContractDO(
                 "sdf", "", "a", "b", "c", ContractPaymentTerm.Monthly, 100000.0, 0.0, true);
         Assertions.assertEquals(actual.get().getEmployeeEmail(), expected.getEmployeeEmail());
@@ -95,7 +95,7 @@ public class RetrieveContractsDAOAdapterTest {
 
     @Test
     public void validateOrEmptyOptional_shouldReturnEmptyOptionalForInvalidPaymentTerm() {
-        Optional<RetrievedContractDO> actual = daoAdapter.validateOrEmptyOptional("a", "b", "c", "M", new BigInteger("100000"), BigInteger.ZERO, true, "sdf");
+        Optional<RetrievedContractDO> actual = daoAdapter.validateOrEmptyOptional("a", "b", "c", "M", new BigInteger("100000"), BigInteger.ZERO, true, "sdf", "");
         Assertions.assertFalse(actual.isPresent());
     }
 }
