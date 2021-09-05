@@ -14,8 +14,7 @@ import java.util.concurrent.CompletableFuture;
 public class RetrieveContractsDAOAdapter implements InputAdapter<EmploymentContract_sol_EmploymentContract, RetrievedContractDO> {
 
 
-    @Override
-    public Optional<RetrievedContractDO> mapDTOtoDO(EmploymentContract_sol_EmploymentContract dto) {
+    public Optional<RetrievedContractDO> mapDTOtoDO(EmploymentContract_sol_EmploymentContract dto, String businessPartnerName) {
         String contractAddress = dto.getContractAddress();
         CompletableFuture<String> paymentTerm = dto.paymentTerm().sendAsync();
         CompletableFuture<String> name = dto.employeeName().sendAsync();
@@ -32,7 +31,7 @@ public class RetrieveContractsDAOAdapter implements InputAdapter<EmploymentContr
                         email.thenCompose( (String em) ->
                             salary.thenCompose( (BigInteger sal) ->
                                 balance.thenCompose( (BigInteger bal) ->
-                                    isActive.thenApply((Boolean active) -> validateOrEmptyOptional(n, sur, em, term, sal, bal, active, contractAddress)
+                                    isActive.thenApply((Boolean active) -> validateOrEmptyOptional(n, sur, em, term, sal, bal, active, contractAddress, businessPartnerName)
                                     )
                                 )
                             )
@@ -52,7 +51,8 @@ public class RetrieveContractsDAOAdapter implements InputAdapter<EmploymentContr
         BigInteger salary,
         BigInteger balance,
         Boolean isActive,
-        String contractAddress) {
+        String contractAddress,
+        String businessPartnerName) {
 
             if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || term.isEmpty() || contractAddress.isEmpty() || salary.equals(BigInteger.ZERO)) {
                 return Optional.empty();
@@ -61,7 +61,7 @@ public class RetrieveContractsDAOAdapter implements InputAdapter<EmploymentContr
             try {
                 ContractPaymentTerm paymentTerm = ContractPaymentTerm.valueOf(term);
                 return Optional.of(
-                   new RetrievedContractDO(contractAddress, "son", name, surname, email, paymentTerm, salary.doubleValue(), balance.doubleValue(), isActive)
+                   new RetrievedContractDO(contractAddress, businessPartnerName, name, surname, email, paymentTerm, salary.doubleValue(), balance.doubleValue(), isActive)
                 );
             } catch (IllegalArgumentException ex) {
                 return Optional.empty();

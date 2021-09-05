@@ -25,7 +25,7 @@ public interface EthNetworkAPI {
 
     CompletableFuture<TransactionReceipt> createAndPublishContract(ContractDO contractContents) throws TransactionException;
 
-    RetrievedContractDO getContractDetailsFromAddress(String contractAddress) throws TransactionException;
+    RetrievedContractDO getContractDetailsFromAddress(String contractAddress, String businessPartnerName) throws TransactionException;
 
     void createWallet(String password, File location);
 
