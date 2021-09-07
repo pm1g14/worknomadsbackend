@@ -9,9 +9,8 @@ contract EmploymentContract {
     string public employeeEmail;
     string public employeeSur;
     string public paymentTerm;
-    string private companyId;
-    string private employeeSalaryUnit;
     string private country;
+    address private signWallet = address(0x816F37f9D8088B7Ec15808b5c0811B217849614D);
 
     string private balanceUnit;
 
@@ -19,8 +18,7 @@ contract EmploymentContract {
     mapping(string => uint) private termMapping;
 
 
-    constructor(string memory _cid,string memory _name, string memory _email, string memory _surname, string memory _country, string memory _salaryTerm, string memory _balanceUnit, uint256 _expiryTimestamp) {
-            companyId = _cid;
+    constructor(string memory _name, string memory _email, string memory _surname, string memory _country, string memory _salaryTerm, string memory _balanceUnit, uint256 _expiryTimestamp, uint256 _salary) {
             employeeName = _name;
             employeeSur = _surname;
             country = _country;
@@ -28,6 +26,7 @@ contract EmploymentContract {
             balanceUnit = _balanceUnit;
             expiryTimestamp = _expiryTimestamp;
             employeeEmail = _email;
+            employeeSalary = _salary;
             populateTermMapping();
     }
 
@@ -72,5 +71,10 @@ contract EmploymentContract {
 
     function isActiveContract() public view returns(bool){
         return block.timestamp < expiryTimestamp; //TODO implement a safer way because a miner could change the contract's block.timestamp
+    }
+
+    function kill(address payable to) public {
+        require(msg.sender == signWallet, "The sender of killing the contract, needs to be a valid sign wallet.");
+        selfdestruct(to);
     }
 }
