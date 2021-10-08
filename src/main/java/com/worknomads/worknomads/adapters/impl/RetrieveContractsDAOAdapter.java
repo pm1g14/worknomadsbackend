@@ -3,7 +3,7 @@ package com.worknomads.worknomads.adapters.impl;
 import com.worknomads.worknomads.adapters.InputAdapter;
 import com.worknomads.worknomads.dos.RetrievedContractDO;
 import com.worknomads.worknomads.enums.ContractPaymentTerm;
-import ethereum.wrappers.EmploymentContract_sol_EmploymentContract;
+import com.worknomads.worknomads.ethereum.wrappers.EmploymentContract_sol_EmploymentContract;
 import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;

@@ -1,8 +1,8 @@
-package ethereum;
+package com.worknomads.worknomads.ethereum;
 
 import com.worknomads.worknomads.dos.ContractDO;
 import com.worknomads.worknomads.dos.RetrievedContractDO;
-import org.springframework.beans.factory.annotation.Value;
+import com.worknomads.worknomads.ethereum.constants.EnvironmentConstants;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
@@ -15,12 +15,8 @@ import java.util.concurrent.CompletableFuture;
 
 public interface EthNetworkAPI {
 
-    @Value("${eth.network.url}")
-    String ethServiceUrl = "http://localhost:8545";
-
-
     default Web3j getConnection() {
-        return Web3j.build(new HttpService(ethServiceUrl));
+        return Web3j.build(new HttpService(EnvironmentConstants.ethServiceUrl));
     }
 
     CompletableFuture<TransactionReceipt> createAndPublishContract(ContractDO contractContents) throws TransactionException;

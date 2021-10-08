@@ -15,7 +15,7 @@ public class StoreNewContractDAO implements StoreContractDAO {
 
 
     @Override
-    public boolean storeContractDetails(String companyWalletAddress, String contractAddress) {
+    public boolean storeContractDetails(String contractAddress, String companyWalletAddress) {
 
         if (!contractAddress.isEmpty() && !companyWalletAddress.isEmpty()) {
             var smartContract = new SmartContract(companyWalletAddress, ContractStatus.ACTIVE.toString(), contractAddress);

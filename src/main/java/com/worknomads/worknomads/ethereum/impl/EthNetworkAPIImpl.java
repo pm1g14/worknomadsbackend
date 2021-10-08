@@ -1,23 +1,26 @@
-package ethereum.impl;
+package com.worknomads.worknomads.ethereum.impl;
 
-import com.worknomads.worknomads.adapters.InputAdapter;
 import com.worknomads.worknomads.adapters.impl.RetrieveContractsDAOAdapter;
 import com.worknomads.worknomads.dos.ContractDO;
 import com.worknomads.worknomads.dos.RetrievedContractDO;
-import ethereum.EthNetworkAPI;
-import ethereum.utils.ContractTransactionUtils;
-import ethereum.wrappers.EmploymentContract_sol_EmploymentContract;
+import com.worknomads.worknomads.ethereum.EthNetworkAPI;
+import com.worknomads.worknomads.ethereum.constants.EnvironmentConstants;
+import com.worknomads.worknomads.ethereum.gasprovider.CustomGasProvider;
+import com.worknomads.worknomads.ethereum.utils.ContractTransactionUtils;
+import com.worknomads.worknomads.ethereum.wrappers.EmploymentContract_sol_EmploymentContract;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Service;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.exceptions.TransactionException;
+import org.web3j.tx.RawTransactionManager;
 import org.web3j.tx.gas.DefaultGasProvider;
 
 import java.io.File;
@@ -30,11 +33,9 @@ import java.security.NoSuchProviderException;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+@Service
 public class EthNetworkAPIImpl implements EthNetworkAPI {
 
-
-    @Autowired
-    private Environment env;
 
     @Autowired
     private RetrieveContractsDAOAdapter daoAdapter = new RetrieveContractsDAOAdapter();
@@ -46,13 +47,12 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
         //TODO investigate how to create wallets on the go
         //Optional<File> walletFileLocation = Optional.of(new File(env.getProperty("employee.wallet.location")));
         //   createWallet(password, walletFileLocation.orElseThrow(FileNotFoundException::new));
-        Optional<Credentials> credentials = getSignWalletCredentials();
-
-        handleNonRetrievableCredentials(credentials);
+        Web3j web3j = getConnection();
+        Credentials credentials = ContractTransactionUtils.createCredentialsFromPassword(EnvironmentConstants.walletPrivate);
         return EmploymentContract_sol_EmploymentContract.deploy(
-                getConnection(),
-                credentials.get(),
-                new DefaultGasProvider(),
+                web3j,
+                credentials,
+                new CustomGasProvider(),
                 contractContents.getEmployeeName(),
                 contractContents.getEmail(),
                 contractContents.getEmployeeSur(),
@@ -61,18 +61,33 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
                 contractContents.getContractDetails().getBalanceUnit().unit,
                 BigInteger.valueOf(contractContents.getContractDetails().getContractExpiry().toEpochDay()),
                 BigDecimal.valueOf(contractContents.getContractDetails().getGrossSalary()).toBigInteger()
-        ).sendAsync().thenApply(this::tryGettingReceiptOrThrow);
+        ).sendAsync().thenApply(this::tryGettingReceiptOrThrow).whenComplete((receipt, ex) -> {
+            if (ex == null) {
+                ContractTransactionUtils.transferBalanceToNewContract(contractContents, web3j, credentials, receipt);
+            } else {
+                web3j.shutdown();
+            }
+
+        }).whenComplete((r,e) -> {
+            if (e != null) ContractTransactionUtils.sucessOrRollbackContractCreation(
+                EnvironmentConstants.signWalletGanache,
+                r.getContractAddress(),
+                e,
+                credentials,
+                r,
+                web3j);
+        } );
     }
 
     @Override
     public RetrievedContractDO getContractDetailsFromAddress(String contractAddress, String businessPartnerName) throws TransactionException {
         Web3j web3 = getConnection();
 
-        Optional<Credentials> credentials = getSignWalletCredentials();
+        Optional<Credentials> credentials = ContractTransactionUtils.getSignWalletCredentials();
 
         logger.debug("Getting contract from address: "+contractAddress);
 
-        handleNonRetrievableCredentials(credentials);
+        ContractTransactionUtils.handleNonRetrievableCredentials(credentials);
         EmploymentContract_sol_EmploymentContract contract = EmploymentContract_sol_EmploymentContract.load(
                 contractAddress, web3, credentials.get(), new DefaultGasProvider());
         Optional<RetrievedContractDO> retrievedContract = daoAdapter.mapDTOtoDO(contract, businessPartnerName);
@@ -99,13 +114,12 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
     @Override
     public String payContract(String contractAddress, BigInteger amount, String toWallet) throws TransactionException {
         Web3j web3 = getConnection();
-        Optional<Credentials> credentials = getSignWalletCredentials();
+        Credentials credentials = ContractTransactionUtils.createCredentialsFromPassword(EnvironmentConstants.walletPrivate);
 
         logger.debug("Getting contract from address: "+contractAddress);
 
-        handleNonRetrievableCredentials(credentials);
         EmploymentContract_sol_EmploymentContract contract = EmploymentContract_sol_EmploymentContract.load(
-                contractAddress, web3, credentials.get(), new DefaultGasProvider());
+                contractAddress, web3, credentials, new CustomGasProvider());
 
         logger.debug("Retrieved contract, attempting to pay amount to wallet: "+toWallet);
         return contract.transferFunds(amount, toWallet).thenApply(EthSendTransaction::getTransactionHash).join();
@@ -127,15 +141,5 @@ public class EthNetworkAPIImpl implements EthNetworkAPI {
         return receipt;
     }
 
-    private Optional<Credentials> getSignWalletCredentials() {
-        String sourceFile = "C:\\Users\\panosmav\\AppData\\Roaming\\Ethereum\\testnet\\keystore\\UTC--2021-08-16T19-46-41.527495000Z--816f37f9d8088b7ec15808b5c0811b217849614d.json";
-        String password = "paokaraoleG41";
-        return ContractTransactionUtils.loadCredentials(password, sourceFile);
-    }
-
-    private void handleNonRetrievableCredentials(Optional<Credentials> credentials) throws TransactionException {
-        if (!credentials.isPresent()) throw new TransactionException("Wallet credentials could not be retrieved, can't sign transaction.");
-
-    }
 
 }
