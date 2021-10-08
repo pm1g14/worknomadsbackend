@@ -43,4 +43,5 @@ INSERT INTO employee (name, surname, email, address, country_of_residence, phone
 
 INSERT INTO smart_contract (address, status, business_partner_wallet_address) VALUES
 ('0x7a605263af0d4490ef70e1b3245a8be81abb2ee8', 'active', '0xca0fc0957f148497f9e2ce6ed104a550c04d9374'),
+('0x0032B3e17319B9374460C37c5b5C14B1B026fa23', 'active', '0xca0fc0957f148497f9e2ce6ed104a550c04d9374'),
 ('0x84ab8d12ca11ef21475962478b2a974fec040b2e', 'active', '0xca0fc0957f148497f9e2ce6ed104a550c04d9374');
